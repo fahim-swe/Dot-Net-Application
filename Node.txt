@@ -1,0 +1,44 @@
+// Adding Program.cs + StartUp.cs 
+
+file to class 
+
+
+------------------------2-------------------------
+creating out first entity data-type
+AppUser{
+
+}
+
+Introduction to Entity Framework 
+An Object Relational Mapper(ORM)
+Translates our code into SQL commands that update out tables in the database
+
+AppUser ---------- 
+DbContext.Users.Add(new User {id= 4, name = Jhon}) ---------- SQL ------- INSERT INTO Users (id, Name) VALUES (4, John);
+
+Features of Entity Framework
+-Querying, change tracking, saving, concurrency, transactions, 
+-caching, built-in conventions, configurations, migrations
+
+Adding EF code
+Microsoft.EntityFrameworkCore
+
+
+dotnet tool install --global dotnet-ef
+
+Microsoft.EntityFrameworkCore.Design
+
+
+dotnet ef migrations add <name>
+dotnet ef migrations list
+dotnet ef migrations script
+dotnet ef dbcontext info
+dotnet ef dbcontext scaffold
+dotnet ef database drop
+dotnet ef database update
+
+
+
+// Create first database
+dotnet ef migrations add InitialCreate -o Migrations
+
