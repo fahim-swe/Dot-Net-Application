@@ -1,0 +1,13 @@
+ng new client --strict false
+npm install
+
+// Making HTTP requests in angular
+
+ADD  HttpClientModule, to app.module.ts
+
+
+// Enable croud in Web Api
+
+
+npm install ngx-bootstrap --save
+ng add ngx-bootstrap
