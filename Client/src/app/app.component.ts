@@ -8,14 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit{
 
-  users : any;
+  users : any = {};
   title = 'Client';
+  loggedIn: boolean = false;
 
   constructor(private http: HttpClient){}
   ngOnInit(): void {
-    this.http.get("https://localhost:7249/Users").subscribe(response => {
-      this.users = response;
-    })
+    // this.http.get("https://localhost:7249/Users").subscribe(response => {
+    //   this.users = response;
+    // })
   }
   
 }

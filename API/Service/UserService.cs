@@ -28,9 +28,9 @@ namespace API.Service
         }
 
         
-        public async Task<AppUser> getUserById(int id)
+        public async Task<AppUser> getUserById(Guid id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.FirstOrDefaultAsync(n => n.Id == id);
         }
     }
 }

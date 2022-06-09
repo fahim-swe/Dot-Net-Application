@@ -11,3 +11,12 @@ ADD  HttpClientModule, to app.module.ts
 
 npm install ngx-bootstrap --save
 ng add ngx-bootstrap
+
+
+*** Import from module in app.module.ts
+
+ng g c nav --skip-tests
+
+add home page: ng g c home --skip-tests
+
+add register page; 

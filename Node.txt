@@ -42,3 +42,11 @@ dotnet ef database update
 // Create first database
 dotnet ef migrations add InitialCreate -o Migrations
 
+
+
+// Add two entity in AppUser(stop dotnet then run this command)
+dotnet ef migrations add AddPassword 
+
+
+
+Microsoft.AspNetCore.Authentication.JwtBearer by Microsoft ()

@@ -1,0 +1,16 @@
+<section class="p-5 text-center container">
+    <div *ngIf="!registerMode" class="row p-lg-5">
+      <div class="col-md-10 col-md-8 mx-auto">
+        <h1 class="fw-light">Welcome to social networking application</h1>
+        <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+        <p>
+          <a (click)=" registerToggle()" href="#" class="btn btn-primary m-2">Registration</a>
+          <a href="#" class="btn btn-secondary m-2">Cancel</a>
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="registerMode">
+        <app-register [usersFromHomeComponent]="users" (cancelRegister)="cancleRegisterMode($event)" ></app-register>
+    </div>
+</section>

@@ -6,6 +6,7 @@ using API.Data;
 using API.Entities;
 using API.Helper;
 using API.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +21,6 @@ namespace API.Controllers
         public UsersController(IUserService context){
             _context = context;
         }
-
-
         
         [HttpGet]
         public async Task<List<AppUser>> GetUsers()
@@ -31,7 +30,8 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> getUserById(int id)
+        
+        public async Task<IActionResult> getUserById(Guid id)
         {
             var user = await _context.getUserById(id);
             return Ok(new Response<AppUser>(user));

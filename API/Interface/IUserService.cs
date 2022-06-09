@@ -10,6 +10,6 @@ namespace API.Interface
     public interface IUserService
     {
         Task<List<AppUser>> getAllUsers();
-        Task<AppUser> getUserById(int id);
+        Task<AppUser> getUserById(Guid id);
     }
 }
