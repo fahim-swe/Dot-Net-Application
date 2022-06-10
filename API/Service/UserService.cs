@@ -32,5 +32,7 @@ namespace API.Service
         {
             return await _context.Users.FirstOrDefaultAsync(n => n.Id == id);
         }
+
+    
     }
 }

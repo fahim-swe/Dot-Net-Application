@@ -9,6 +9,7 @@ namespace API.Interface
 {
     public interface IPostService:  IEntityBaseRepository<UserPost>
     {
-          Task<List<AppUser>> getAllUsers();
+          Task<UserPost> getPostById(Guid id); 
+          Task<List<UserPost>> getAllUserPosts();
     }
 }

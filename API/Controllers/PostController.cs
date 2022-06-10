@@ -18,14 +18,23 @@ namespace API.Controllers
     {
         private readonly IPostService _service;
 
+
         public PostController(IPostService service){
             _service = service;
-        }
+           
+        }      
 
         [HttpGet]
-        public async Task<IEnumerable<UserPost>> GetAllPost()
+        public async Task<List<UserPost>> GetAllPost()
         {   
-           return await _service.getAllAsync();
+           return await _service.getAllUserPosts();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostById(Guid id)
+        {
+            var userPost = await _service.getPostById(id);
+            return Ok(new Response<UserPost> (userPost));
         }
 
         [HttpPost()]
@@ -40,7 +49,7 @@ namespace API.Controllers
                 Type = postDTO.Type,
                 UserId = postDTO.UserId
             };
-            
+          
 
             await _service.AddAsync(post);
             return Ok(new Response<UserPost>(post));
@@ -59,7 +68,6 @@ namespace API.Controllers
             await _service.DeleteAsync(id);
             return Ok(new Response<String> ("Deleted Successfully"));
         }
-
 
     }
 }

@@ -20,3 +20,70 @@ ng g c nav --skip-tests
 add home page: ng g c home --skip-tests
 
 add register page; 
+
+
+What are Observables ?
+New standard for managinng async data included in ES7
+Introduced in angular v2
+Observables are lazy collections of multiple values over time
+You can think of observables like a newsletter 
+-> Only subscribers of the newsletter recieive the newsletter
+-> If on-one subscribs to the newsletter it probably will not be printed.
+
+
+Promise: 
+provides a single future values
+not lazy
+can not cancle
+
+Observable: 
+Emits multiple values over time
+lazy
+able to cancel
+can use with map, filter, reduce and other operators
+
+
+angular Service
+getMembers()
+{
+    return this.http.ret('api/users')
+}
+
+
+angular component onInit()
+getMembers()
+{
+    this.Service.getMembers();
+}
+
+
+Observables and Rxjs
+
+// Just select part of data- from api: 
+getMembers()
+{
+    return this.http.get('api/users').pipe(
+        map(members=>){
+            console.log(members.id)
+            return members.id
+        }
+    )
+}
+
+
+getMembers()
+{
+    this.Service.getMembers().subscribe(members=>{
+        this.members = members
+    }, error=>{
+
+    },()=>{
+        console.log("Completed)
+    })
+}
+
+
+
+Async Pipe : Automatically subscribe/unsubsribes from the observables
+<li *ngFor='let member of Service.getMembers() | async'> {{member.username}}
+ 

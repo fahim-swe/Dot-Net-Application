@@ -50,3 +50,6 @@ dotnet ef migrations add AddPassword
 
 
 Microsoft.AspNetCore.Authentication.JwtBearer by Microsoft ()
+
+
+Routing create some 

@@ -16,6 +16,6 @@ namespace API.Entities
 
         public byte[] passwordSalt {get; set;}
         public byte[] passwordHash {get; set;}
-        public List<UserPost> UserPosts {get; set;}
+    
     }
 }

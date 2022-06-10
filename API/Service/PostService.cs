@@ -18,9 +18,19 @@ namespace API.Service
             _context = context;
         }
 
-        public Task<List<AppUser>> getAllUsers()
+        public async Task<List<UserPost>> getAllUserPosts()
         {
-            throw new NotImplementedException();
+            var userPost =await _context.UserPosts.Include(x => x.User).
+                OrderByDescending(x => x.CreatedDate).
+                ToListAsync();
+            return userPost;
+        }
+
+        public Task<UserPost> getPostById(Guid id)
+        {
+            var userPost = _context.UserPosts.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return userPost;
         }
     }
 }
