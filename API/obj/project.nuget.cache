@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "57xSChr0frq/CktGRu/aaH5xyhOj9Sc4yMUR6qOJHO71I8bymvq2zdIAfE+hLkF4ly6Zl0uDWykldhqPMPp9UA==",
+  "dgSpecHash": "444HEjlY+uokkvSUjd0vZtJ91K2xQypLudNzd3MU2uEhNqUbA44imq7N29CJd8HBvdcDEW9NyN334QiNhmSSxw==",
   "success": true,
   "projectFilePath": "/home/fahim/Documents/Dot net web API/Chatting Application/Chatting Application/API/API.csproj",
   "expectedPackageFiles": [
+    "/home/fahim/.nuget/packages/automapper/11.0.0/automapper.11.0.0.nupkg.sha512",
+    "/home/fahim/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/11.0.0/automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
     "/home/fahim/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/fahim/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.5/microsoft.aspnetcore.authentication.jwtbearer.6.0.5.nupkg.sha512",
     "/home/fahim/.nuget/packages/microsoft.aspnetcore.jsonpatch/6.0.5/microsoft.aspnetcore.jsonpatch.6.0.5.nupkg.sha512",

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using API.Data;
+using API.Helper;
 using API.Interface;
 using API.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,16 +24,17 @@ namespace API.Extensions
         }
 
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration _config){
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ITokenService, TokenService>();
-
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+            );
+            
             return services;
         }
 

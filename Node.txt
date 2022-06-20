@@ -53,3 +53,51 @@ Microsoft.AspNetCore.Authentication.JwtBearer by Microsoft ()
 
 
 Routing create some 
+
+Update seed data: dotnet watch run
+
+ public class Seed
+    {
+       public static async Task SeedUsers(DataContext context)
+       {
+           if(await context.Users.AnyAsync()) return;
+
+           var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
+           var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
+
+           foreach(var user in users){
+               using var hmac = new HMACSHA512();
+               user.UserName = user.UserName.ToLower();
+               user.passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("12345678"));
+               user.passwordSalt = hmac.Key;
+
+               AppUser  _user = user;
+               context.Add(_user);
+           }
+
+           await context.SaveChangesAsync();
+
+        }
+    }
+
+ // In program.cs 
+ public static async Task Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateAsyncScope();
+            var services = scope.ServiceProvider;
+            try{
+                var context = services.GetRequiredService<DataContext>();
+                await context.Database.MigrateAsync();
+                await Seed.SeedUsers(context);
+                
+            }catch(Exception ex){
+               var logger = services.GetRequiredService<ILogger<Program>>();
+               logger.LogError(ex, "An Error");
+            }
+            await host.RunAsync();
+        }
+
+
+// AutoMapper
+AutoMapper.Extensions.Microsoft.Dependenc

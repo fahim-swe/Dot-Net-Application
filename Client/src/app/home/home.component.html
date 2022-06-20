@@ -11,6 +11,6 @@
     </div>
 
     <div *ngIf="registerMode">
-        <app-register [usersFromHomeComponent]="users" (cancelRegister)="cancleRegisterMode($event)" ></app-register>
+        <app-register (cancelRegister)="cancleRegisterMode($event)" ></app-register>
     </div>
 </section>

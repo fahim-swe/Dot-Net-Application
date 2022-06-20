@@ -9,20 +9,17 @@ import { AccountService } from '../_services/account.service';
 export class HomeComponent implements OnInit {
 
   registerMode = false;
-  users: any;
-  constructor(private accountService: AccountService) { }
+ 
+  constructor() { }
 
   ngOnInit(): void {
-    this.getAllUsers();
+    
   }
 
   registerToggle(){
     this.registerMode = !this.registerMode;
   }
-
-  getAllUsers(){
-    this.accountService.getAllUsers().subscribe(users => this.users = users);
-  }
+  
 
   cancleRegisterMode(event: boolean){
     this.registerMode = event;

@@ -87,3 +87,42 @@ getMembers()
 Async Pipe : Automatically subscribe/unsubsribes from the observables
 <li *ngFor='let member of Service.getMembers() | async'> {{member.username}}
  
+
+ Notify anything
+ npm install ngx-toastr
+
+
+ // Auth in angular 
+ ng g guard auth --skip-tests
+
+
+
+
+
+
+ \\ Section-09: 
+ Using typescript types
+ Using the async pipe
+ Using bootstrap for styling
+ Basic css tricks to enhance the look
+ Using a 3rd party photo gallery
+
+
+
+ Creating member type ts 
+ google: Json to ts then create member.ts and photo.ts 
+
+ \\ Get members 
+ 
+
+ Section 10
+ 1) angular template forms
+ 2) the canDeactivate route guard
+ 3) the @ViewChild decorator
+ 4) persisting changes to the Api
+ 5) adding loading indicators to the client app
+ 6) caching data in angular services
+
+
+// Create a member edit components
+ng g c member-edit --skip-tests
