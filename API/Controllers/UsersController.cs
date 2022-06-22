@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOs;
 using API.Entities;
 using API.Helper;
 using API.Interface;
@@ -44,17 +46,6 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<MemberDto>>(result));
         }
 
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<MemberDto>> GetUserById(Guid id)
-        // {
-        //     var user = await _userRepository.GetUserByIdAsync(id);
-        //     var jsonString = JsonConvert.SerializeObject(user);
-            
-        //     var result = JsonConvert.DeserializeObject<AppUser>(jsonString);
-
-            
-        //     return Ok(_mapper.Map<MemberDto> (result));
-        // }     
 
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUserByName(string username)
@@ -67,6 +58,28 @@ namespace API.Controllers
             
             
             return Ok(_mapper.Map<MemberDto> (result));
-        }         
+        }   
+
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            var username = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            var _object = await _userRepository.GetUserByUserNameAsync(username);
+           
+            var jsonString = JsonConvert.SerializeObject(_object);
+            
+            var user = JsonConvert.DeserializeObject<AppUser>(jsonString);
+            Console.WriteLine(user);
+
+            user = _mapper.Map(memberUpdateDto, user);
+            
+
+            await _userRepository.Update(user);
+
+            return NoContent();
+            
+        }      
     }
 }

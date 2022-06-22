@@ -27,6 +27,7 @@
     "ionic-selectable": "^4.7.1",
     "ngx-bootstrap": "^8.0.0",
     "ngx-gallery-9": "^1.0.6",
+    "ngx-spinner": "^13.1.1",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

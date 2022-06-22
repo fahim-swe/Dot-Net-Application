@@ -1,1 +1,69 @@
-<p>{{member.userName}}</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>Your Profile</h1>
+    </div>
+    <div class="col-md-8">
+        <div class="alert alert-info" *ngIf="editForm.dirty">
+            <strong>Information: </strong> You have made changes. Any unsaved changes will be
+            lost
+        </div>
+    </div>
+    <div class="col-md-4" >
+        <div class="card" style="height: 45%; margin-bottom: 3rem;">
+            <img src="{{Member.photos[0].url}}" class="card-img-top img-thumbnail">
+            <div class="card-body">
+                <strong>Location: </strong>
+                <p>{{Member.city}} {{Member. country}}</p>
+
+                <strong>Age: </strong>
+                <p>{{Member.age}}</p>
+
+                <strong>Last Active</strong>
+                <p>{{Member.lastActive}}</p>
+                <strong>Member Since</strong>
+                <p>{{Member.created}}</p>
+            </div>
+
+            <div class="card-footer">
+                <div class="d-grid gap-2" >
+                   <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-primary" type="submit">Save changes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+        <div>
+            <mat-tab-group mat-align-tabs="start">
+                <mat-tab label="About {{Member.knownAs}}">
+
+                    <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
+                        <h1 class="mt-2">Description</h1>
+                        <textarea class="form-control" [(ngModel)]="Member.introduction" name="introduction" rows="6"></textarea>
+    
+                        <h1 class="mt-2">Looking For</h1>
+                        <textarea class="form-control" [(ngModel)]="Member.lookingFor" name="lookingFor" rows="6"></textarea>
+    
+                        <h1 class="mt-2">Interests</h1>
+                        <textarea class="form-control" [(ngModel)]="Member.interests" name="interests" rows="6"></textarea>
+    
+                        <h1 class="mt-2">Location Details</h1>
+                        <div class="input-group mb-3 gap-2">
+                            <label class="m-auto me-2">City</label>
+                            <input [(ngModel)]="Member.city" name="city" type="text" class="form-control" placeholder="{{Member.city}}">
+                            <label class="m-auto me-2">Country</label>
+                            <input [(ngModel)]="Member.country" name="country" type="text" class="form-control" placeholder="{{Member.country}}">
+                        </div>
+                    </form>
+                    
+                </mat-tab>
+                <mat-tab label="Photos">
+
+                </mat-tab>
+               
+            </mat-tab-group>
+        </div>
+       
+    </div>
+</div>

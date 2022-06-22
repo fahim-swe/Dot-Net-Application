@@ -126,3 +126,6 @@ Async Pipe : Automatically subscribe/unsubsribes from the observables
 
 // Create a member edit components
 ng g c member-edit --skip-tests
+
+
+// Display loading indicators

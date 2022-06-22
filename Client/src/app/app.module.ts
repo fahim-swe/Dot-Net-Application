@@ -4,7 +4,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import 'hammerjs';
-
+import { NgxSpinnerModule } from "ngx-spinner";
 import {MatTabsModule} from '@angular/material/tabs'
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,7 @@ import {ToastrModule} from 'ngx-toastr'
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 
 @NgModule({
@@ -50,11 +51,13 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-righty'
     }),
-    NgxGalleryModule
+    NgxGalleryModule,
+    NgxSpinnerModule,
   ],
 
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass:  LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

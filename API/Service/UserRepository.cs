@@ -63,6 +63,8 @@ namespace API.Service
                             c.LastActive,
                             c.LookingFor,
                             c.DateOfBirth,
+                            c.passwordHash,
+                            c.passwordSalt,
                             photos = c   
                                 .Photos
                                 .Select( e => new {e.Id, e.Url, e.IsMain})
@@ -105,13 +107,12 @@ namespace API.Service
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async void Update(AppUser user)
+        public async Task Update(AppUser user)
         {
             EntityEntry entityEntry = _context.Entry<AppUser>(user);
             entityEntry.State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
-
        
     }
 }
