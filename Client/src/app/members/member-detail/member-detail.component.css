@@ -17,3 +17,13 @@
     background-color: #fff;
     border-top: none;
 }
+
+ngx-gallery-image .ngx-gallery-arrow {
+    background-color: orangered;
+  }
+ngx-gallery-thumbnails .ngx-gallery-arrow {
+    background-color: orangered;
+  }
+ngx-gallery-preview .ngx-gallery-arrow {
+    background-color: orangered;
+  }

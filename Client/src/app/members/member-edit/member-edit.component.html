@@ -11,18 +11,18 @@
     </div>
     <div class="col-md-4" >
         <div class="card" style="height: 45%; margin-bottom: 3rem;">
-            <img src="{{Member.photos[0].url}}" class="card-img-top img-thumbnail">
+            <img src="{{Member?.photoUrl}}" class="card-img-top img-thumbnail">
             <div class="card-body">
                 <strong>Location: </strong>
-                <p>{{Member.city}} {{Member. country}}</p>
+                <p>{{Member?.city}} {{Member?. country}}</p>
 
                 <strong>Age: </strong>
-                <p>{{Member.age}}</p>
+                <p>{{Member?.age}}</p>
 
                 <strong>Last Active</strong>
-                <p>{{Member.lastActive}}</p>
+                <p>{{Member?.lastActive}}</p>
                 <strong>Member Since</strong>
-                <p>{{Member.created}}</p>
+                <p>{{Member?.created}}</p>
             </div>
 
             <div class="card-footer">
@@ -35,8 +35,8 @@
     </div>
     <div class="col-md-8 col-sm-12">
         <div>
-            <mat-tab-group mat-align-tabs="start">
-                <mat-tab label="About {{Member.knownAs}}">
+            <mat-tab-group dynamicHeight mat-align-tabs="start">
+                <mat-tab label="About {{Member?.knownAs}}">
 
                     <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
                         <h1 class="mt-2">Description</h1>
@@ -59,11 +59,12 @@
                     
                 </mat-tab>
                 <mat-tab label="Photos">
-
+                    <app-photo-editor [member]="Member"></app-photo-editor>
                 </mat-tab>
-               
             </mat-tab-group>
         </div>
        
     </div>
 </div>
+
+

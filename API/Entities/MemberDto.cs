@@ -11,7 +11,7 @@ namespace API.Entities
         public Guid Id { get; set; }
         public String UserName { get; set; }
 
-        public Photos PhotoUrl {get; set;}
+        public String PhotoUrl {get; set;}
         public int Age { get; set; }
 
         public String KnownAs { get; set; }

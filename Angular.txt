@@ -129,3 +129,29 @@ ng g c member-edit --skip-tests
 
 
 // Display loading indicators
+
+
+// Section 11
+1) Photo storage options
+2) Adding related entities
+3) Using a 3rd party API
+4) Using the debugger(again!)
+5) Updating and deleting resources
+6) What to return when creating resources in a REST based API
+
+
+Photo Storage Options
+** Direct on sql database(binary files)
+** In server using file system
+** Cloud
+
+Cloudinary
+1) Client uploads photo to API with JWT
+2) Server uploads the photo to Cloudinary
+3) Cloudinary stores photo, sends response
+4) API saves photo URL and Public ID to DB
+5) Saved in DB and given auto generated ID
+6) 201 Created Response sent to client with location header
+
+
+ 

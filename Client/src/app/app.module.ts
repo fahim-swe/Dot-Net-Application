@@ -24,8 +24,10 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 
 
+import {FileUploadModule } from 'ng2-file-upload';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +41,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     MessagesComponent,
     MemberCardComponent,
     MemberEditComponent,
+    PhotoEditorComponent,
+
    
   ],
   imports: [
@@ -53,6 +57,7 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     }),
     NgxGalleryModule,
     NgxSpinnerModule,
+    FileUploadModule
   ],
 
   providers: [

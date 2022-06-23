@@ -48,3 +48,4 @@
 /home/fahim/Documents/Dot net web API/Chatting Application/Chatting Application/API/bin/Debug/net6.0/Data/UserSeedData.json
 /home/fahim/Documents/Dot net web API/Chatting Application/Chatting Application/API/bin/Debug/net6.0/AutoMapper.dll
 /home/fahim/Documents/Dot net web API/Chatting Application/Chatting Application/API/bin/Debug/net6.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+/home/fahim/Documents/Dot net web API/Chatting Application/Chatting Application/API/bin/Debug/net6.0/CloudinaryDotNet.dll

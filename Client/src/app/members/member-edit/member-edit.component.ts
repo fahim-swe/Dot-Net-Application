@@ -16,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 export class MemberEditComponent implements OnInit {
 
   @ViewChild('editForm') editForm!: NgForm;
-  Member: any;
+  Member!: Member;
   user : any;
 
   constructor(private accountService: AccountService, private memberService: MembersService

@@ -23,4 +23,13 @@ export class MembersService {
   updateMember(member: any){
     return this.http.put('https://localhost:7249/Users', member);
   }
+
+
+  setMainPhoto(photoId: string){
+    return this.http.put( 'https://localhost:7249/Users/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: string){
+    return this.http.delete('https://localhost:7249/Users/delete-photo/' + photoId);
+  }
 }

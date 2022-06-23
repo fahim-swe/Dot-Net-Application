@@ -23,7 +23,7 @@
 
       <div class="dropdown" *ngIf="(accountService.currentUser$| async) as user">
         <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          <img src="{{user.photoUrl}}" alt="mdo" width="32" height="32" class="rounded-circle">
           {{user.username | titlecase}} 
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
