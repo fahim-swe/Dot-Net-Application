@@ -18,9 +18,9 @@ namespace API.Interface
         Task<object> GetUserByUserNameAsync(String UserName);
 
         Task UploadPhoto(Photos photo);
-        Task<string> DeletePhoto(Guid id);
+        Task<string> DeletePhoto(Guid photoId, string userId);
 
-        Task<bool> SetMainPhoto(Guid id);
+        Task<bool> SetMainPhoto(Guid id, Guid userId);
         
     }
 }

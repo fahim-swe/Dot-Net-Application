@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
@@ -9,6 +10,7 @@ using API.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Service
 {
@@ -21,16 +23,19 @@ namespace API.Service
             _context = context;
         }
 
-        public async Task<string> DeletePhoto(Guid id)
+        public async Task<string> DeletePhoto(Guid id, string userId)
         {
-            
-            var result = await _context.Photos.FirstOrDefaultAsync(x =>(
-               x.Id == id
-            ));
+            Guid appUserId = Guid.Empty;
+            appUserId = Guid.Parse(userId);
 
-            if(result == null || result.IsMain == true) return null;
-            
+            var result = await _context.Photos.Where(x=>(
+                x.Id == id & 
+                x.AppUserId == appUserId
+            )).FirstOrDefaultAsync();
 
+           
+            if(result == null || result.IsMain == true ) return null;
+            
             EntityEntry entityEntry = _context.Entry<Photos>(result);
             entityEntry.State = EntityState.Deleted;
             await _context.SaveChangesAsync();
@@ -123,13 +128,14 @@ namespace API.Service
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SetMainPhoto(Guid id)
+        public async Task<bool> SetMainPhoto(Guid id, Guid userId)
         {
             var photo = await _context.Photos.Where(item => (
-                item.Id == id  || 
-                item.IsMain == true
+                (item.Id == id  && item.AppUserId == userId) || 
+                (item.IsMain == true &&   item.AppUserId == userId)
+              
             )).Take(2).ToListAsync();
-            if(photo==null) return false;
+            if(photo.Count() == 0) return false;
 
             foreach(var item in photo){
                 if(item.Id == id) item.IsMain = true;

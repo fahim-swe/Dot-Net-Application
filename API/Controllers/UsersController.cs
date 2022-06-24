@@ -91,28 +91,19 @@ namespace API.Controllers
 
         [HttpPost("add-photo")]
         public async Task<IActionResult> AddPhoto(IFormFile file)
-        {
-            var username = User.GetUserName();
-                   
-            var _object = await _userRepository.GetUserByUserNameAsync(username);
-           
-            var jsonString = JsonConvert.SerializeObject(_object);
-            
-            var user = JsonConvert.DeserializeObject<AppUser>(jsonString);
-
+        {           
             var result = await _photoService.AddPhotoAsync(file);
 
             if(result.Error != null) return BadRequest(result.Error.Message);
+            
+            Guid appUserId = Guid.Empty;
+            appUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Anonymous));
 
             var photo = new Photos{
                 Url = result.SecureUri.AbsoluteUri,
                 PublicId = result.PublicId,
-                AppUserId = user.Id,
+                AppUserId = appUserId
             };
-            
-            if(user.Photos.Count == 0){
-                photo.IsMain = true;
-            }
 
             await _userRepository.UploadPhoto(photo);
             
@@ -124,7 +115,22 @@ namespace API.Controllers
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<IActionResult> DelelePhoto(Guid photoId)
         {
-            var publicUri = await _userRepository.DeletePhoto(photoId);
+            // var userId = "";
+            // foreach (var claim in User.Claims){
+            // //    Console.WriteLine("Claim:{0} Value:{1}", claim.Type, claim.Value);
+            // //    Console.WriteLine(claim.ToString());
+            //     Console.WriteLine(claim.Type.ToString()  + " " + claim.Value.ToString());
+            //     if(claim.Type.ToString() == "name"){
+            //         userId = claim.Value.ToString();
+            //         break;
+            //     }
+            // }
+
+        
+            // Console.WriteLine(userId);
+            // Console.WriteLine("What: " + User.FindFirstValue(ClaimTypes.Anonymous));
+
+            var publicUri = await _userRepository.DeletePhoto(photoId, User.FindFirstValue(ClaimTypes.Authentication).ToString());
             if(publicUri != null){
                 await _photoService.DelelePhotoAsync(publicUri);
                 return Ok("Deleted");
@@ -135,7 +141,10 @@ namespace API.Controllers
         [HttpPut("set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(Guid photoId)
         {
-            return Ok(await _userRepository.SetMainPhoto(photoId));
+            Guid appUserId = Guid.Empty;
+            appUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Authentication));
+
+            return Ok(await _userRepository.SetMainPhoto(photoId, appUserId));
         }
     }
 }
