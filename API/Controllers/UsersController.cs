@@ -30,24 +30,31 @@ namespace API.Controllers
         private readonly IMapper _mapper;       
         private readonly IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService){
+
+        public UsersController(IUserRepository userRepository, 
+
+            IMapper mapper, IPhotoService photoService){
             _userRepository = userRepository;
             _mapper = mapper;
             _photoService = photoService;
-
+           
         }   
         
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]PaginationFilter filter)
         {
-            var users = (await _userRepository.GetUsersAsync());
-
-            var jsonString = JsonConvert.SerializeObject(users);
-
-            var result = JsonConvert.DeserializeObject<List<AppUser>>(jsonString);
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             
-            return Ok(_mapper.Map<List<MemberDto>>(result));
+    
+            var data = _mapper.Map<List<MemberDto>>(await _userRepository.GetUsersAsync(validFilter));
+        
+            var totalRecords = await _userRepository.CountAsync();
+
+            // var pagedResponse = PaginationHelper.CreatePagedReponse<MemberDto>(data, validFilter, totalRecords, _uriService, route);
+
+            return Ok(data); 
         }
 
 
@@ -96,13 +103,12 @@ namespace API.Controllers
 
             if(result.Error != null) return BadRequest(result.Error.Message);
             
-            Guid appUserId = Guid.Empty;
-            appUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Anonymous));
+           
 
             var photo = new Photos{
                 Url = result.SecureUri.AbsoluteUri,
                 PublicId = result.PublicId,
-                AppUserId = appUserId
+                AppUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.Authentication))
             };
 
             await _userRepository.UploadPhoto(photo);

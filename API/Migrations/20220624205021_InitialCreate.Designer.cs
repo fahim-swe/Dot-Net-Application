@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220611091639_InitialCreate")]
+    [Migration("20220624205021_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,15 +46,12 @@ namespace API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Interests")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Introduction")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("KnownAs")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastActive")
@@ -94,6 +91,7 @@ namespace API.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("PublicId")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Url")
@@ -138,13 +136,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Photos", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
+                    b.HasOne("API.Entities.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("API.Entities.UserPost", b =>

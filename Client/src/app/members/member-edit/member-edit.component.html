@@ -9,29 +9,35 @@
             lost
         </div>
     </div>
+    
     <div class="col-md-4" >
-        <div class="card" style="height: 45%; margin-bottom: 3rem;">
-            <img src="{{Member?.photoUrl}}" class="card-img-top img-thumbnail">
-            <div class="card-body">
-                <strong>Location: </strong>
-                <p>{{Member?.city}} {{Member?. country}}</p>
 
-                <strong>Age: </strong>
-                <p>{{Member?.age}}</p>
-
-                <strong>Last Active</strong>
-                <p>{{Member?.lastActive}}</p>
-                <strong>Member Since</strong>
-                <p>{{Member?.created}}</p>
+        <mat-card  class="example-card">
+            
+            <div class="card-img-wrapper">
+              <img mat-card-image src="{{Member.photoUrl || './assets/user.png'}}" alt="Photo of a Shiba Inu">
             </div>
+            
+            <mat-card-content>
+                <p> {{Member?.city}}, {{Member?.country}}</p>
 
-            <div class="card-footer">
-                <div class="d-grid gap-2" >
-                   <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-primary" type="submit">Save changes</button>
-                </div>
-            </div>
+                <p> Age: {{Member?.age}}</p>
 
-        </div>
+                <p>Last Active: {{Member?.lastActive}}</p>
+
+                <p>Member Since: {{Member?.created}}</p>
+
+            </mat-card-content>
+            <mat-card-actions>
+                <hr>
+              <section>
+                <div  class="example-button-row">
+                    <button [disabled]="!editForm.dirty" form="editForm" style="width: 50%;" mat-raised-button color="accent">Save Changes</button>
+                  </div>
+              </section>
+              <hr>
+            </mat-card-actions>
+          </mat-card>
     </div>
     <div class="col-md-8 col-sm-12">
         <div>

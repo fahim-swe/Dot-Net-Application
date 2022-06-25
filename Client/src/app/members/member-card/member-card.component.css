@@ -1,11 +1,15 @@
-.card:hover img{
+.mat-card:hover img{
     transform: scale(1.2, 1.2);
     transition-duration: 500ms;
     transition-timing-function: ease-out;
     opacity: 0.7;
 }
 
-.card img {
+.example-card{
+   margin: 5% 0px; 
+}
+
+.mat-card img {
     transform: scale(1.0, 1.0);
     transition-duration: 500ms;
     transition-timing-function: ease-out;
@@ -17,21 +21,66 @@
 }
 
 .member-icons{  
-   position: absolute;
-   bottom: -30%;
-   left: 0%;
-   right : 0%;
-   margin-right: auto;
-   margin-left: auto;
-   opacity: 0;
-}
+    position: absolute;
+    bottom: -30%;
+    left: 0%;
+    right : 0%;
+    margin-right: auto;
+    margin-left: auto;
+    opacity: 0;
+ }
+ 
+ 
+ .card-img-wrapper:hover .member-icons{
+     opacity: 1;
+     bottom: 0;
+ }
 
-
-.card-img-wrapper:hover .member-icons{
-    opacity: 1;
-    bottom: 0;
-}
+ .profile-icon {
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+  }
+ 
 
 .animate{
     transition: all 0.3s ease-in-out;
 }
+
+
+
+  section {
+    display: table;
+  }
+  
+  .example-label {
+    display: table-cell;
+    font-size: 14px;
+    margin-left: 8px;
+    min-width: 120px;
+  }
+  
+  .example-button-row {
+    display: table-cell;
+    width: 490px;
+  }
+  
+  .example-button-row .mat-button-base {
+    margin: 8px 8px 8px 0;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(209, 214, 185);
+  }
+  
+  .example-flex-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+  }
+  

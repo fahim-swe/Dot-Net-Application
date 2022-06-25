@@ -7,6 +7,7 @@ using API.Data;
 using API.Helper;
 using API.Interface;
 using API.Service;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +27,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration _config){
            
             services.Configure<CloudinarySettings>(_config.GetSection("CloudinarySettings"));
+            
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();

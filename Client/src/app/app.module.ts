@@ -6,12 +6,12 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import 'hammerjs';
 import { NgxSpinnerModule } from "ngx-spinner";
 import {MatTabsModule} from '@angular/material/tabs'
-
+import {MatInputModule} from '@angular/material/input';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { PostComponent } from './post/post.component';
@@ -25,6 +25,16 @@ import { MemberCardComponent } from './members/member-card/member-card.component
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+
+import {MatCardModule} from '@angular/material/card';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 import {FileUploadModule } from 'ng2-file-upload';
@@ -42,8 +52,6 @@ import {FileUploadModule } from 'ng2-file-upload';
     MemberCardComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-
-   
   ],
   imports: [
     BrowserModule,
@@ -57,7 +65,18 @@ import {FileUploadModule } from 'ng2-file-upload';
     }),
     NgxGalleryModule,
     NgxSpinnerModule,
-    FileUploadModule
+    FileUploadModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatRadioModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatPaginatorModule
   ],
 
   providers: [

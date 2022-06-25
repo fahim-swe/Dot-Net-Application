@@ -28,11 +28,11 @@ namespace API.Migrations
                     LastActive = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Gender = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Introduction = table.Column<string>(type: "longtext", nullable: false)
+                    Introduction = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LookingFor = table.Column<string>(type: "longtext", nullable: false)
+                    LookingFor = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Interests = table.Column<string>(type: "longtext", nullable: false)
+                    Interests = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     City = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -53,7 +53,7 @@ namespace API.Migrations
                     Url = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsMain = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PublicId = table.Column<string>(type: "longtext", nullable: true)
+                    PublicId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AppUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },

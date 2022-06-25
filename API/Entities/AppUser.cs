@@ -27,11 +27,11 @@ namespace API.Entities
 
         public String Gender { get; set; }
 
-        public String Introduction { get; set; }
+        public String? Introduction { get; set; } = string.Empty;
 
-        public String LookingFor { get; set; }
+        public String? LookingFor { get; set; } = string.Empty;
 
-        public String Interests { get; set; }
+        public String? Interests { get; set; } = string.Empty;
 
         public String City { get; set; }
 

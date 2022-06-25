@@ -7,10 +7,7 @@ namespace API.Helper
 {
     public class Response<T>
     {
-        public Response(Task<List<Entities.AppUser>> users)
-        {
-            
-        }
+    
 
         public Response(T data)
         {

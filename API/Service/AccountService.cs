@@ -18,9 +18,18 @@ namespace API.Service
             _context = context;
         }
 
-        public async Task<AppUser> getByUserName(string UserName)
+        public async Task<AppUser> getByUserName(string Username)
         {
-            return await _context.Users.FirstOrDefaultAsync(_ => _.UserName == UserName);
+            return  await _context.Users.Where(x => (
+                x.UserName == Username
+            )).FirstOrDefaultAsync();
+
+            // retn await _context.Users.FirstOrDefaultAsync(_ => _.UserName == Username);
+        }
+
+        public async Task<bool> isAnyUserExit(string Username)
+        {
+            return await _context.Users.AnyAsync(x => x.UserName == Username);
         }
     }
 }

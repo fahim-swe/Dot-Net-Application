@@ -11,7 +11,7 @@ namespace API.Entities
 {
     public class UserPost : IEntityBase
     {
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity), Key()]
+        [Key()]
         public Guid Id {get; set;}
         public DateTime CreatedDate {get; set;}
         public DateTime LastModify {get; set;}

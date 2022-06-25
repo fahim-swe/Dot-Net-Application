@@ -137,13 +137,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Photos", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
+                    b.HasOne("API.Entities.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("API.Entities.UserPost", b =>

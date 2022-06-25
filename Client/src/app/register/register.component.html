@@ -1,53 +1,110 @@
-<div>
-    <div class="">
-        <div class="rounded d-flex justify-content-center">
-            <div class="col-md-10 col-sm-12 shadow-lg p-5 bg-light">
-                <div class="text-center">
-                    <h3 class="text-primary">Create Account</h3>
-                </div>
-                <div class="p-4">
-                    <form #registerFrom = "ngForm" (ngSubmit)="registerUser()">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-primary"><i
-                                    class="bi bi-person-plus-fill text-white"></i></span>
-                            <input 
-                                  [(ngModel)]="model.username" 
-                                  name="username"
-                                  type="text" 
-                                  class="form-control" 
-                                  placeholder="Username"                                
-                                  >
-                        </div>
-
-                        <select class="form-select mb-3" aria-label="Default select example">
-                            <option selected>Who is your favorite user ?</option>
-                            <option *ngFor="let user of usersFromHomeComponent" [value]="user.userName">{{user.userName}}</option>
-                          </select>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-primary"><i
-                                    class="bi bi-key-fill text-white"></i></span>
-                            <input 
-                                  [(ngModel)]="model.password" 
-                                  name="password"
-                                  type="password"
-                                  class="form-control" 
-                                  placeholder="password"
-                                  
-                                  >
-                        </div>
-
-                        <p>
-                            <button type="reset" class="btn btn-success m-2">Reset</button>
-                            <button type="submit" class="btn btn-primary m-2">Sign In</button>
-                            <button type="button" (click)="cancel()" class="btn btn-secondary m-2">Cancel </button>
-                        </p>
-                            
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
+<mat-card>
+    <mat-card-title>Create New Account</mat-card-title>
+    <form [formGroup]="registerForm" class="" (ngSubmit)="registerForm.valid && registerUser()" autocomplete="off">                   
+        <hr>
+        <mat-radio-group formControlName="gender" aria-label="Select an option">
+            <mat-radio-button value="Male">Male</mat-radio-button>
+            <mat-radio-button value="Female">Female</mat-radio-button>
+        </mat-radio-group>
+
+        <mat-form-field style="margin-top: 5%;" class="example-full-width" appearance="fill">
+            <mat-label>User Name</mat-label>
+            <input type="text" matInput formControlName="username" placeholder="User-name">
+            <mat-error *ngIf="registerForm.hasError('username') && !registerForm.hasError('required')">
+              Please enter a username
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              Username is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Known As</mat-label>
+            <input type="text" matInput formControlName="knownAs" placeholder="Nick-Name">
+            <mat-error *ngIf="registerForm.hasError('nick name') && !registerForm.hasError('required')">
+              Please enter a valid nick name
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              Nick-name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field  class="example-full-width"  appearance="fill">
+            <mat-label>Choose a date</mat-label>
+            <input matInput formControlName="dateOfBirth" [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>City</mat-label>
+            <input type="text" matInput formControlName="city" placeholder="City">
+            <mat-error *ngIf="registerForm.hasError('city') && !registerForm.hasError('required')">
+              Please enter your City Name
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              City is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+       
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Country</mat-label>
+            <input type="text" matInput formControlName="country" placeholder="Country">
+            <mat-error *ngIf="registerForm.hasError('country') && !registerForm.hasError('required')">
+              Please enter your country name
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              Country is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Enter Password</mat-label>
+            <input formControlName="password"  matInput [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="registerForm.hasError('email') && !registerForm.hasError('required')">
+                Please enter a valid password
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              Confirm Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+       
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Confirm Password</mat-label>
+            <input formControlName="confirmPassword"  matInput [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="registerForm.hasError('email') && !registerForm.hasError('required')">
+                Please enter a valid password
+            </mat-error>
+            <mat-error *ngIf="registerForm.hasError('required')">
+              Confirm Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+       
+         <mat-card-actions>
+            <button type="reset" mat-raised-button>Reset</button>
+            <button  
+                  [disabled]="!registerForm.valid"
+                  type="submit" 
+                  mat-raised-button 
+                  color="primary">Sign In</button>
+            <button type="button"  (click)="cancel()"  mat-raised-button color="accent">Cancel</button>
+          </mat-card-actions>
+    </form>
+
+    <p >{{errorMessage}}</p>
+ 
+</mat-card>
+
+  

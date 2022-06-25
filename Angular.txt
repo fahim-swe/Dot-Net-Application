@@ -154,4 +154,9 @@ Cloudinary
 6) 201 Created Response sent to client with location header
 
 
- 
+Section-12
+1) use reactive forms 
+2) use angular validation for inputs
+3) implement custor validation
+4) implement resuable form controls
+5) working with date inputs

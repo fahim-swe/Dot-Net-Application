@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Extensions;
 using API.Interface;
 using API.Service;
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +37,7 @@ namespace API
             services.AddIdentityService(_config);
             services.AddControllers();
 
+           
             services.AddCors();
             services.AddSwaggerGen(c =>
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
+using API.Helper;
 
 namespace API.Interface
 {
@@ -11,7 +12,7 @@ namespace API.Interface
         Task Update(AppUser user); 
         Task<bool> SaveAllAsync();
 
-        Task<object> GetUsersAsync();
+        Task<List<AppUser>>  GetUsersAsync(PaginationFilter filter);
 
         Task<object> GetUserByIdAsync(Guid id);
 
@@ -21,6 +22,8 @@ namespace API.Interface
         Task<string> DeletePhoto(Guid photoId, string userId);
 
         Task<bool> SetMainPhoto(Guid id, Guid userId);
+
+        Task<int> CountAsync();
         
     }
 }

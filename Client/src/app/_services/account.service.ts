@@ -47,10 +47,18 @@ export class AccountService {
 
 
   registration(model: any){
-    return this.http.post(this.baseUrl+"/Account", model);
+    return this.http.post('https://localhost:7249/Account', model).pipe(
+      map((res: any)=>{
+        const user = res.data;
+        if(user){
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSource.next(user);
+        }
+      })
+    );
   }
 
   getAllUsers(){  
-    return this.http.get(this.baseUrl + "/Users");
+    return this.http.get('https://localhost:7249/Users');
   }
 }

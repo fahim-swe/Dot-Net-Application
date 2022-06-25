@@ -18,7 +18,6 @@ namespace API.Entities
         
         public String PublicId { get; set; }
 
-        public AppUser AppUser { get; set; }
 
         [ForeignKey("AppUserId")]
         public Guid AppUserId { get; set; }

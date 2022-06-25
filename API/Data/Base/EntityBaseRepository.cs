@@ -46,7 +46,7 @@ namespace E_Commerce_App_Practices_1.Data.Base
 
 
       
-       
+        
         public async Task UpdateAsync(Guid id, T entity)
         {
             EntityEntry entityEntry = _context.Entry<T>(entity);

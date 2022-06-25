@@ -27,3 +27,13 @@ ngx-gallery-thumbnails .ngx-gallery-arrow {
 ngx-gallery-preview .ngx-gallery-arrow {
     background-color: orangered;
   }
+
+  .example-button-row{
+    display: flex;
+    justify-content: center;
+  }
+  
+  .example-card{
+    margin: 10% 0%;
+  }
+  

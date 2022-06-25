@@ -1,16 +1,23 @@
-<section class="p-5 text-center container">
-    <div *ngIf="!registerMode" class="row p-lg-5">
-      <div class="col-md-10 col-md-8 mx-auto">
-        <h1 class="fw-light">Welcome to social networking application</h1>
-        <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-        <p>
-          <a (click)=" registerToggle()" href="#" class="btn btn-primary m-2">Registration</a>
-          <a href="#" class="btn btn-secondary m-2">Cancel</a>
-        </p>
-      </div>
-    </div>
 
+
+<mat-card  *ngIf="!registerMode" class="example-card">
+  <mat-card-title>Welcome to social networking application</mat-card-title>
+  <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+  <mat-card-content style="padding: 0% 10%;">
+    <p>Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+    <p></p>
+  </mat-card-content>
+  <mat-card-actions>
+        <button (click)=" registerToggle()" mat-raised-button color="primary">Sign up</button>
+        <button mat-raised-button color="warn">Cancel</button>
+  </mat-card-actions>
+</mat-card>
+
+<section class="p-5 text-center container">
     <div *ngIf="registerMode">
         <app-register (cancelRegister)="cancleRegisterMode($event)" ></app-register>
     </div>
 </section>
+
+
+
