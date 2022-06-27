@@ -7,7 +7,10 @@ namespace API.Helper
 {
     public class Response<T>
     {
-    
+        public Response()
+        {
+            
+        }
 
         public Response(T data)
         {

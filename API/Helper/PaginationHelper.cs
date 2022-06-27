@@ -26,6 +26,7 @@ namespace API.Helper
             respose.LastPage = uriService.GetPageUri(new PaginationFilter(roundedTotalPages, validFilter.PageSize), route);
             respose.TotalPages = roundedTotalPages;
             respose.TotalRecords = totalRecords;
+            return respose;
 
             return respose;
         }

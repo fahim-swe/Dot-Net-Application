@@ -23,20 +23,23 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    // [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;       
         private readonly IPhotoService _photoService;
+        private readonly IUriService _uriService;
 
 
         public UsersController(IUserRepository userRepository, 
+            IUriService uriService,
 
             IMapper mapper, IPhotoService photoService){
             _userRepository = userRepository;
             _mapper = mapper;
             _photoService = photoService;
+            _uriService = uriService;
            
         }   
         
@@ -45,16 +48,22 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            var validFilter = _mapper.Map<PaginationFilter>(filter);
             
+            validFilter.setName(User.FindFirstValue(ClaimTypes.NameIdentifier).ToString());
+           
+            // foreach(var item in filter.GetType().GetProperties()){
+            //     Console.WriteLine(item.Name + " " + item.GetValue(filter ,null).ToString());
+            // }
+            
+            Console.WriteLine(User.FindFirstValue(ClaimTypes.NameIdentifier));
     
             var data = _mapper.Map<List<MemberDto>>(await _userRepository.GetUsersAsync(validFilter));
         
-            var totalRecords = await _userRepository.CountAsync();
+            var totalRecords = await _userRepository.CountAsync() - 1;
 
-            // var pagedResponse = PaginationHelper.CreatePagedReponse<MemberDto>(data, validFilter, totalRecords, _uriService, route);
-
-            return Ok(data); 
+            var pagedReponse = PaginationHelper.CreatePagedReponse<MemberDto>(data, validFilter, totalRecords, _uriService, route);
+            return Ok(pagedReponse);
         }
 
 
@@ -62,8 +71,6 @@ namespace API.Controllers
         public async Task<ActionResult<MemberDto>> GetUserByName(string username)
         {
            
-
-     
             var user = await _userRepository.GetUserByUserNameAsync(username);
            
             var jsonString = JsonConvert.SerializeObject(user);
@@ -102,7 +109,7 @@ namespace API.Controllers
             var result = await _photoService.AddPhotoAsync(file);
 
             if(result.Error != null) return BadRequest(result.Error.Message);
-            
+           
            
 
             var photo = new Photos{

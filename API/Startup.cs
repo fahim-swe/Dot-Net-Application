@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -31,11 +32,20 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
             services.AddDatabaseService(_config);
             services.AddApplicationService(_config);
             services.AddIdentityService(_config);
             services.AddControllers();
+
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
 
            
             services.AddCors();
@@ -78,8 +88,10 @@ namespace API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -99,6 +111,31 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            
+            app.Use(async (context,next) =>{
+                await context.Response.WriteAsync("Hello From Use-1 \n");
+                await next();
+                await context.Response.WriteAsync("Hello From Use-1 \n");
+            });
+
+
+            app.Use(async (context,next) =>{
+                await context.Response.WriteAsync("Hello From Use-2 \n");
+                await next();
+                await context.Response.WriteAsync("Hello From Use-2 \n");
+            });
+
+            
+            app.Use(async (context,next) =>{
+                await context.Response.WriteAsync("Hello From Use-3 \n");
+                await next();
+                await context.Response.WriteAsync("Hello From Use-3 \n");
+            });
+
+            app.Run(async context =>{
+                await context.Response.WriteAsync("Hello From Run \n");
             });
         }
     }

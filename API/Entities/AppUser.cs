@@ -22,7 +22,7 @@ namespace API.Entities
         public DateTime DateOfBirth { get; set; }
         public String KnownAs { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Created { get; set; }
         public DateTime LastActive { get; set; } = DateTime.Now;
 
         public String Gender { get; set; }

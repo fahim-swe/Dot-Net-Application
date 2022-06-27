@@ -24,6 +24,7 @@ namespace API.Helper
             CreateMap<Photos, PhotoDto>();
             CreateMap<MemberUpdateDto, AppUser>();
             CreateMap<RegisterDTO, AppUser>();
+            CreateMap<PaginationFilter, PaginationFilter>();
         }
     }
 }

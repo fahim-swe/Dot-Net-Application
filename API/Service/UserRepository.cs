@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+
 using API.Data;
 using API.Entities;
 using API.Interface;
@@ -104,7 +99,11 @@ namespace API.Service
 
         public async Task<List<AppUser>> GetUsersAsync(PaginationFilter filter)
         {
-            var _user = await (from u in _context.Users
+            var minAge = DateTime.Today.AddYears(-filter.minAge);
+            var maxAge = DateTime.Today.AddYears(-filter.maxAge - 1);
+            string userName = filter.getName();
+
+            var _user = (from u in _context.Users
                          join p in _context.Photos on u.Id equals p.AppUserId into eGroup
                          from p in eGroup.DefaultIfEmpty()
                          select new {
@@ -121,20 +120,79 @@ namespace API.Service
                             u.City,
                             u.Country,
                             u.Photos
-                         }
-                        )
-                        .Skip((filter.PageNumber - 1) * filter.PageSize)
-                        .Take(filter.PageSize).ToListAsync();
+                         });
 
-            var setting = new Newtonsoft.Json.JsonSerializerSettings();
-            setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            _user = _user.Where(x=> x.UserName != filter.getName());
+            _user = _user.Where( x => x.DateOfBirth <= minAge && x.DateOfBirth >= maxAge);
 
-            var jsonString = JsonConvert.SerializeObject(_user);
+            if(filter.Gender == 1) _user = _user.Where(x => x.Gender == "Male");
+            else if(filter.Gender == 2) _user = _user.Where(x => x.Gender == "Female");
+
+            if(filter.OrderedBy == 1) _user = _user.OrderByDescending(x => x.Created);
+            else if(filter.OrderedBy == 2) _user = _user.OrderByDescending(x => x.LastActive);
+
+            _user = _user.Skip((filter.PageNumber - 1) * filter.PageSize)
+                   .Take(filter.PageSize);
+
+           
+            
+            var user = await _user.ToListAsync();
+
+            var jsonString = JsonConvert.SerializeObject(user);
 
             var result = JsonConvert.DeserializeObject<List<AppUser>>(jsonString);
            
             
            return result;
+
+            //  var _user =  (from u in _context.Users
+            //              join p in _context.Photos on u.Id equals p.AppUserId into eGroup
+            //              from p in eGroup.DefaultIfEmpty()
+            //              select new {
+            //                 u.Id,
+            //                 u.UserName,
+            //                 u.DateOfBirth,
+            //                 u.KnownAs,
+            //                 u.Created,
+            //                 u.LastActive,
+            //                 u.Gender,
+            //                 u.Introduction,
+            //                 u.LookingFor,
+            //                 u.Interests,
+            //                 u.City,
+            //                 u.Country,
+            //                 u.Photos
+            //              }).AsQueryable();
+
+
+            // _user = _user.Where(
+            //                 x=> x.Gender == "Male" && filter.Gender == 1
+            //              )
+            //              .Where(
+            //                 x=> x.Gender == "Female" && filter.Gender == 2
+            //              )
+            //              .Where(
+            //                 x=> x.Created >= minAge && x.Created <= maxAge
+            //              )
+            //              .Skip((filter.PageNumber - 1) * filter.PageSize)
+            //              .Take(filter.PageSize).AsQueryable();
+            
+            // var _result = await _user.ToListAsync();
+             
+            // Select by age range 
+
+            // Order by created
+
+            // Order by last active
+
+            // Select male or female
+            
+
+
+            // var setting = new Newtonsoft.Json.JsonSerializerSettings();
+            // setting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+          
 
             // var urs = await _context.Users.ToListAsync();
             
