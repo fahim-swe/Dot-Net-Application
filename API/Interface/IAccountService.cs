@@ -10,5 +10,7 @@ namespace API.Interface
     public interface IAccountService : IEntityBaseRepository<AppUser>{
        Task<Boolean> isAnyUserExit(string Username);
        Task<AppUser> getByUserName(string Username);
+
+       Task<string> takeProfileImageUri(string username);
     }
 }

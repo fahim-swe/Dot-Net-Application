@@ -22,7 +22,7 @@ namespace API.Entities
         public DateTime DateOfBirth { get; set; }
         public String KnownAs { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public DateTime LastActive { get; set; } = DateTime.Now;
 
         public String Gender { get; set; }
@@ -39,6 +39,16 @@ namespace API.Entities
 
         public List<Photos> Photos { get; set; }
 
+
+        // List of users that liked currently login user
+        public ICollection<UserLike> LikedByUsers {get; set;}
+
+        // List of users that currently login user has liked
+        public ICollection<UserLike> LikedUsers {get; set;}
+        
+        public ICollection<Message> MessagesSent {get; set;}
+        public ICollection<Message> MessagesReceived {get; set;}
+        
         public int GetAge()
         {
             return DateTimeHelper.CalculateAge(this.DateOfBirth);

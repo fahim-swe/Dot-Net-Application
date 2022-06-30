@@ -23,13 +23,16 @@ namespace API.Service
             return  await _context.Users.Where(x => (
                 x.UserName == Username
             )).FirstOrDefaultAsync();
-
-            // retn await _context.Users.FirstOrDefaultAsync(_ => _.UserName == Username);
         }
 
         public async Task<bool> isAnyUserExit(string Username)
         {
             return await _context.Users.AnyAsync(x => x.UserName == Username);
+        }
+
+        public Task<string> takeProfileImageUri(string username)
+        {
+            throw new NotImplementedException();
         }
     }
 }

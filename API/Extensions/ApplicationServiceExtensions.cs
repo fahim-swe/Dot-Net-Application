@@ -28,11 +28,14 @@ namespace API.Extensions
            
             services.Configure<CloudinarySettings>(_config.GetSection("CloudinarySettings"));
             
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ILikesService, LikesService>();
+
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             services.AddControllersWithViews()

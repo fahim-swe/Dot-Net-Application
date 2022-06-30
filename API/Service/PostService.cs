@@ -26,9 +26,9 @@ namespace API.Service
             return userPost;
         }
 
-        public Task<UserPost> getPostById(Guid id)
+        public async Task<UserPost> getPostById(Guid id)
         {
-            var userPost = _context.UserPosts.Include(x => x.User)
+            var userPost = await _context.UserPosts.Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return userPost;
         }

@@ -23,7 +23,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    // [Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -138,7 +138,6 @@ namespace API.Controllers
             //         break;
             //     }
             // }
-
         
             // Console.WriteLine(userId);
             // Console.WriteLine("What: " + User.FindFirstValue(ClaimTypes.Anonymous));
