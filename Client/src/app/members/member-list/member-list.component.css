@@ -1,0 +1,37 @@
+
+/* filering section  */
+
+
+.example-label {
+    display: table-cell;
+    font-size: 14px;
+    margin-left: 8px;
+    min-width: 120px;
+  }
+
+  .example-button-row {
+    display: table-cell;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+
+  .apply-filter{
+    display: flex;
+  }  
+
+  .select-item{
+    padding-right: 2%;
+  }
+
+.mat-pagination{
+    width: 100%;
+    margin-bottom: 5vh;
+}
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}

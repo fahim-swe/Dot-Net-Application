@@ -26,6 +26,7 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 
+
 import {MatCardModule} from '@angular/material/card';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
@@ -35,9 +36,17 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSelectModule} from '@angular/material/select';
+import {MatListModule} from '@angular/material/list';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 import {FileUploadModule } from 'ng2-file-upload';
+import { TimeagoModule } from 'ngx-timeago';
+import { LoginComponent } from './login/login.component';
+import { MemberMessageComponent } from './member-message/member-message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +61,8 @@ import {FileUploadModule } from 'ng2-file-upload';
     MemberCardComponent,
     MemberEditComponent,
     PhotoEditorComponent,
+    LoginComponent,
+    MemberMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +76,8 @@ import {FileUploadModule } from 'ng2-file-upload';
     }),
     NgxGalleryModule,
     NgxSpinnerModule,
+
+
     FileUploadModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -76,9 +89,20 @@ import {FileUploadModule } from 'ng2-file-upload';
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatPaginatorModule
-  ],
+    MatPaginatorModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatSelectModule,
+    ScrollingModule,
 
+    TimeagoModule.forRoot(),
+    MatListModule
+   
+
+  ],
+  exports: [
+    
+  ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass:  LoadingInterceptor, multi: true}

@@ -1,0 +1,9 @@
+.example-spacer {
+    flex: 1 1 auto;
+    
+  }
+ .tollbar{
+    border-bottom: 2px solid rgb(238, 224, 224);
+ }
+
+

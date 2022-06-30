@@ -23,9 +23,9 @@
 
                 <p> Age: {{Member?.age}}</p>
 
-                <p>Last Active: {{Member?.lastActive}}</p>
+                <p>Last Active: {{Member?.lastActive | timeago}}</p>
 
-                <p>Member Since: {{Member?.created}}</p>
+                <p>Member Since: {{Member?.created | date:'dd MMM yyyy'}}</p>
 
             </mat-card-content>
             <mat-card-actions>

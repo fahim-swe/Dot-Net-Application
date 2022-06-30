@@ -1,0 +1,72 @@
+
+<mat-list role="list">
+    <mat-list-item *ngFor="let message of messageRes.reverse(); let i = index" >
+        <div *ngIf="i == messageRes.length-1 &&  message.serderUsername == username" class="recieved sms-card">
+            <small  class="text-muted">
+                <span class="fa fa-clock-a">{{message.messageSent | timeago}}</span>
+                <span class="text-danger" *ngIf="!message.dateRead">
+                    (unread)
+                </span>
+                <span class="text-sucess" *ngIf="message.dateRead">
+                    (read {{message.dateRead | timeago}})
+                </span>
+            </small>
+            <p> {{message.content}}</p>
+        </div>
+
+        <div  *ngIf="i == messageRes.length-1 && message.serderUsername != username" class="send sms-card">
+            <small  class="text-muted">
+                <span class="fa fa-clock-a">{{message.messageSent | timeago}}</span>
+                <span class="text-danger" *ngIf="!message.dateRead">
+                    (unread)
+                </span>
+                <span class="text-sucess" *ngIf="message.dateRead">
+                    (read {{message.dateRead | timeago}})
+                </span>
+            </small>
+            <p>{{message.content}}</p>
+        </div>
+
+
+        <div *ngIf="i !== messageRes.length-1 && message.serderUsername == username" class="recieved sms-card">
+            <small  class="text-muted hide-text">
+                <span class="fa fa-clock-a">{{message.messageSent | timeago}}</span>
+                <span class="text-danger" *ngIf="!message.dateRead">
+                    (unread)
+                </span>
+                <span class="text-sucess" *ngIf="message.dateRead">
+                    (read {{message.dateRead | timeago}})
+                </span>
+            </small>
+            <p> {{message.content}}</p>
+        </div>
+
+        <div  *ngIf="i !== messageRes.length-1 && message.serderUsername != username" class="send sms-card">
+            <small  class="text-muted hide-text">
+                <span class="fa fa-clock-a">{{message.messageSent | timeago}}</span>
+                <span class="text-danger" *ngIf="!message.dateRead">
+                    (unread)
+                </span>
+                <span class="text-sucess" *ngIf="message.dateRead">
+                    (read {{message.dateRead | timeago}})
+                </span>
+            </small>
+            <p>{{message.content}}</p>
+        </div>
+    </mat-list-item>
+</mat-list>
+
+<form [formGroup]="myContent" (ngSubmit)="sendSMS()" class="example-form">
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Message</mat-label>
+      <textarea
+        formControlName="content"
+        matInput
+        ></textarea>
+    </mat-form-field>
+    <button type="submit" mat-fab color="warn" aria-label="Example icon button with a home icon">
+        <mat-icon>send</mat-icon>
+    </button>
+</form>
+

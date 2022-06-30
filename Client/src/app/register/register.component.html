@@ -1,5 +1,4 @@
 
-
 <mat-card>
     <mat-card-title>Create New Account</mat-card-title>
     <form [formGroup]="registerForm" class="" (ngSubmit)="registerForm.valid && registerUser()" autocomplete="off">                   
@@ -37,7 +36,7 @@
             <input matInput formControlName="dateOfBirth" [matDatepicker]="picker">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+        </mat-form-field>
 
         <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>City</mat-label>
@@ -102,8 +101,6 @@
             <button type="button"  (click)="cancel()"  mat-raised-button color="accent">Cancel</button>
           </mat-card-actions>
     </form>
-
-    <p >{{errorMessage}}</p>
  
 </mat-card>
 

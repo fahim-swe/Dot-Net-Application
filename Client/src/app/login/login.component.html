@@ -1,0 +1,35 @@
+<div class="login-page">
+    <mat-card class="login-card">
+        <p class="login-tollbar">
+             <mat-toolbar>
+               My Application
+            </mat-toolbar>
+          </p>
+        
+    <form class="login-form">
+        <div class="example-container">
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Enter your email</mat-label>
+              <input matInput placeholder="pat@example.com" [formControl]="email" required>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div>
+        
+          <div class="example-container">
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Enter your email</mat-label>
+              <input matInput placeholder="pat@example.com" [formControl]="email" required>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div> 
+          <hr>
+          <mat-card-actions>
+            <button  mat-raised-button color="primary">Login</button>
+            <button mat-raised-button color="warn">Sign up</button>
+          </mat-card-actions>
+       
+    </form>
+      </mat-card>
+</div>
+
+

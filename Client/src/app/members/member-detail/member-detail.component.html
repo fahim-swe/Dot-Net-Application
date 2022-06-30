@@ -12,9 +12,9 @@
 
                 <p> Age: {{Member?.age}}</p>
 
-                <p>Last Active: {{Member?.lastActive}}</p>
+                <p> <strong>Active: </strong> {{Member?.lastActive | timeago}}</p>
 
-                <p>Member Since: {{Member?.created}}</p>
+                <p> <strong> Since Member: </strong> {{Member?.created | date}}</p>
 
             </mat-card-content>
             <mat-card-actions>
@@ -47,7 +47,9 @@
 
                     <ngx-gallery  [options]="galleryOptions" [images]=" galleryImages" style=" display: inline-table; margin-bottom: 20px; backgroud-color: red"></ngx-gallery>
                 </mat-tab>
-                <mat-tab label="Message">Message will here</mat-tab>
+                <mat-tab label="Message">
+                   <app-member-message [username]="Member.userName" ></app-member-message>
+                </mat-tab>
             </mat-tab-group>
         </div>
        

@@ -1,5 +1,70 @@
+
+<div *ngIf="showUi">
+<section >
+    <div class="example-button-row">
+    
+        <div class="apply-filter">
+            <div class="select-item" >
+                <mat-form-field appearance="fill">
+                <mat-label>Age From</mat-label>
+                <mat-select (selectionChange)="getFromAge($event.value)">
+                    <mat-option *ngFor="let food of ageFrom" [value]="food.value">
+                        {{food.viewValue}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="select-item">
+                <mat-form-field appearance="fill">
+                <mat-label>Age To</mat-label>
+                <mat-select (selectionChange)="getToAge($event.value)">
+                    <mat-option *ngFor="let food of ageTo" [value]="food.value">
+                        {{food.viewValue}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="select-item">
+                <mat-form-field appearance="fill">
+                <mat-label>Select Gender</mat-label>
+                <mat-select (selectionChange)="getGender($event.value)">
+
+                    <mat-option *ngFor="let food of gerder" [value]="food.value">
+                        {{food.viewValue}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="filter-btn">
+                <button mat-stroked-button (click)="applyFiler()" color="accent"> Apply Filters </button>
+                <button mat-stroked-button id="reset-btn" type="reset" color="warn">Reset Filter</button>
+            </div>
+           
+        </div>
+        <div>
+            <button mat-stroked-button (click)="lastActive()" >Last Active</button>
+            <button mat-stroked-button (click)="recentyJoin()" >Recently Join</button>
+        </div>    
+    </div>     
+</section>
+
 <div class="row">
     <div *ngFor="let member of members" class="col-md-4 col-lg-3">
         <app-member-card [Member]="member" ></app-member-card>
     </div>
+</div>
+
+<div   class="pagination">
+    <mat-paginator class="mat-pagination" [length]="this.pageResponse.totalRecords"
+        [pageIndex]="page.firstPage"
+        [pageSize]="page.pageSize"         
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="pageEvent($event)"
+        aria-label="Select page">
+    </mat-paginator>
+</div>
+
+
 </div>

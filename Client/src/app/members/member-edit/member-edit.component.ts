@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Member } from 'src/app/_models/member';
-import { User } from 'src/app/_models/User';
 import { MembersService } from 'src/app/_services/members.service';
 import {AccountService} from 'src/app/_services/account.service';
 import { take } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+
 
 
 @Component({

@@ -7,7 +7,16 @@
 
 .example-card{
    margin: 5% 0px; 
+   position: relative;
 }
+
+.card-btn
+{
+  background-color: rgb(255, 103, 77);
+}
+
+
+
 
 .mat-card img {
     transform: scale(1.0, 1.0);
@@ -36,11 +45,6 @@
      bottom: 0;
  }
 
- .profile-icon {
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover; /* Resize the background image to cover the entire container */
-  }
  
 
 .animate{
@@ -48,6 +52,9 @@
 }
 
 
+.example-header-image{
+  background-size: cover;
+}
 
   section {
     display: table;
@@ -84,3 +91,10 @@
     width: 120px;
   }
   
+  .card-btn{
+    display: none;
+  }
+
+  .example-card:hover .card-btn{
+    display: block;
+  }
