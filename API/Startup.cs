@@ -6,6 +6,7 @@ using API.Extensions;
 using API.Interface;
 using API.Service;
 using API.Services;
+using API.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +39,7 @@ namespace API
             services.AddApplicationService(_config);
             services.AddIdentityService(_config);
             services.AddControllers();
+            services.AddSignalR();
 
             services.AddSingleton<IUriService>(o =>
             {
@@ -48,7 +50,13 @@ namespace API
             });
 
            
-            services.AddCors();
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+                 builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200");
+            }));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -100,10 +108,12 @@ namespace API
             }
 
             app.UseHttpsRedirection();
+             app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            // app.UseCors(x => x.AllowAnyHeader()
+            //         .AllowAnyMethod().AllowAnyOrigin());
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -111,6 +121,8 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PersenceHub>("hubs/presence");
+                endpoints.MapHub<MessageHub>("hubs/message");
             });
 
             

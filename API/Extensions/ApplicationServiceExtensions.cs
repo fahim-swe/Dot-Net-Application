@@ -8,6 +8,7 @@ using API.Helper;
 using API.Interface;
 using API.Service;
 using API.Services;
+using API.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +28,8 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration _config){
            
             services.Configure<CloudinarySettings>(_config.GetSection("CloudinarySettings"));
+            
+            services.AddSingleton<PresenceTracker>();
             
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -57,7 +60,24 @@ namespace API.Extensions
                         ValidateIssuer = false,
                         ValidateAudience = false,
                     };
+
+                    // For signalR
+                    options.Events = new JwtBearerEvents 
+                    {
+                        OnMessageReceived = context =>{
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            
+                            if(!string.IsNullOrEmpty(accessToken) && 
+                                 path.StartsWithSegments("/hubs")){
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
                 }
+
             );
             
             return services;
