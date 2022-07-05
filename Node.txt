@@ -97,7 +97,72 @@ Update seed data: dotnet watch run
             }
             await host.RunAsync();
         }
-
+dotnet watch run
 
 // AutoMapper
 AutoMapper.Extensions.Microsoft.Dependenc
+
+
+// Section: 15
+More many to many relationship
+using query params in angular
+using route resolvers in angular
+
+
+
+
+
+
+
+
+
+
+** SignalR 
+Create a SignalR folder 
+-- Create a first hab
+
+namespace API.SignalR
+{
+    [Authorize]
+    public class PersenceHub : Hub
+    {
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.Others.SendAsync("UserIsOnline", Context.User.GetUserName());
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await Clients.Others.SendAsync("UserIsOFfline", Context.User.GetUserName());
+            await base.OnDisconnectedAsync(exception);
+        }
+    }
+}
+
+
+// In startup.cs
+ services.AddSignalR();
+
+ app.UseCors(x => x.AllowAnyHeader()
+                    .AllowCredentials()
+                    .AllowAnyMethod().AllowAnyOrigin());
+ 
+ // router endpoints after Controller-endpoints
+ endpoints.MapHub<PersenceHub>("hubs/presence");
+
+
+  // add query Authentication 
+options.Events = new JwtBearerEvents 
+{
+    OnMessageReceived = context =>{
+        var accessToken = context.Request.Query["access_token"];
+        var path = context.HttpContext.Request.Path;
+                            
+        if(!string.IsNullOrEmpty(accessToken) && 
+            path.StartsWithSegments("/hubs")){
+            context.Token = accessToken;
+        }
+
+        return Task.CompletedTask;
+    }
+};

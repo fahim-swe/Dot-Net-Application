@@ -86,7 +86,7 @@ export class MemberListComponent implements OnInit {
       }
       
     })  
-    console.log(this.showUi);
+    // console.log(this.showUi);
   }
 
   loadMembers(){
@@ -94,7 +94,7 @@ export class MemberListComponent implements OnInit {
     this.memberService.getMembers(this.page).subscribe (res=> {
         this.pageResponse = res;
         this.members = this.pageResponse.data;
-        console.log(this.pageResponse);
+        // console.log(this.pageResponse);
     })
   }
 

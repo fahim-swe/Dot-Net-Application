@@ -8,6 +8,9 @@
             </div>
             
             <mat-card-content>
+                <span [class.is-online]="(presence.onlineUsers$ | async)?.includes(Member.userName)">
+                    <i class="fa fa-user mr-2"> Online </i>
+                </span>  
                 <p> {{Member?.city}}, {{Member?.country}}</p>
 
                 <p> Age: {{Member?.age}}</p>
@@ -31,7 +34,9 @@
     </div>
     <div class="col-md-8 col-sm-12">
         <div>
-            <mat-tab-group mat-align-tabs="start">
+            <mat-tab-group
+                    (selectedTabChange)="tabChanged($event)"
+                    mat-align-tabs="start">
                 <mat-tab label="About {{Member?.knownAs}}">
                     <strong >Description</strong>
                     <p>{{Member?.introduction}}</p>
@@ -47,7 +52,10 @@
 
                     <ngx-gallery  [options]="galleryOptions" [images]=" galleryImages" style=" display: inline-table; margin-bottom: 20px; backgroud-color: red"></ngx-gallery>
                 </mat-tab>
-                <mat-tab label="Message">
+                <mat-tab 
+                 label="Message"
+                 
+                 >
                    <app-member-message [username]="Member.userName" ></app-member-message>
                 </mat-tab>
             </mat-tab-group>

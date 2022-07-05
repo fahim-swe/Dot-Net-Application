@@ -12,22 +12,24 @@ import { MessageService } from '../_services/message.service';
 })
 export class MemberMessageComponent implements OnInit {
 
-  @Input() username!: string;
   messageRes!: messageRes[];
+  @Input() username!: string;
   sms!: messageRes;
   
   myContent! : FormGroup;
   
 
 
-  constructor(private fb: FormBuilder, private messageService: MessageService) { }
+  constructor(private fb: FormBuilder, public messageService: MessageService) {
+   
+   }
 
   
   
  
   
   ngOnInit(): void {
-    this.getUserMessage(this.username);
+    this.getUserMessage();
     this.Ini();
   }
 
@@ -39,24 +41,27 @@ export class MemberMessageComponent implements OnInit {
     })
   }
 
-  getUserMessage(username: string){
-    this.messageService.getMessageFromUser(username).subscribe(res=>{
-      this.messageRes = res;
-    })
-  }
+ 
 
   sendSMS(){
+    console.log(this.myContent.value);
     if(this.myContent.valid){
-      console.log(this.myContent);
-      this.messageService.sentMessage(this.myContent.value).subscribe(res=>{
-        console.log(res);
-        this.sms = res;
+      
+      this.messageService.sentMessage(this.myContent.value).then((message)=>{
         this.myContent.reset();
-        this.messageRes.unshift(this.sms);
-        
+        this.Ini();
       })
     }
-    
+  }
+
+
+  getUserMessage(){
+    // this.messageService.messageThread$.pipe().subscribe(res => {
+    //   this.messageRes = res;
+    // })
+    this.messageService.messageThread$.subscribe(res => {
+      this.messageRes = res as unknown as messageRes[];
+    })
   }
 
 }

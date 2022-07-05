@@ -1,10 +1,20 @@
 <mat-card class="example-card">
   <mat-card-header>
-    <div mat-card-avatar style="background-image:  url('{{Member.photoUrl}}'), url('./assets/user.png');" class="example-header-image"></div>
-    <mat-card-title>{{Member.knownAs}} 
-      <small style="font-size: 14px;" class="">{{Member.city}} {{Member.country}}</small>
+    <div mat-card-avatar style="background-image:  url('{{Member?.photoUrl}}'), url('./assets/user.png');" class="example-header-image"></div>
+    <mat-card-title>{{Member?.knownAs}} 
+      <!-- <span [class.is-online]="(presence.onlineUsers$ | async)?.includes(Member.userName)">
+        <i class="fa fa-user mr-2"></i>
+    </span> -->
+      <span class="is-online"
+        *ngIf="(presence.onlineUsers$ | async)?.includes(Member.userName)">
+      <mat-icon>lens</mat-icon>
+    </span>
+      <small style="font-size: 14px;" class="">{{Member?.city}} 
+     
+  
+        {{Member?.country}}</small>
     </mat-card-title>
-    <mat-card-subtitle>{{Member.lastActive | timeago}}</mat-card-subtitle>
+    <mat-card-subtitle>{{Member?.lastActive | timeago}}</mat-card-subtitle>
   </mat-card-header>
 
 
@@ -24,10 +34,12 @@
     <section class="card-btn">
       <div class="example-button-row">
         <div class="example-flex-container">
-          <button mat-icon-button color="primary" routerLink="/members/{{Member.userName}}" aria-label="Example icon button with a home icon">
+          <button mat-icon-button color="primary" routerLink="/members/{{Member?.userName}}" aria-label="Example icon button with a home icon">
             <mat-icon>account_circle</mat-icon>
           </button>
-          <button mat-icon-button color="accent" aria-label="Example icon button with a menu icon">
+          <button mat-icon-button color="accent" 
+          routerLink="/members/{{Member?.userName}}" [queryParams]="{tab:3}"
+          aria-label="Example icon button with a menu icon">
             <mat-icon> chat</mat-icon>
           </button>
           <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
