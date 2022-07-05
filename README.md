@@ -14,3 +14,7 @@
 
  ## Chat-with user
 ![chat-](https://user-images.githubusercontent.com/86300358/177312409-35a17831-683f-4261-81d9-be30b087d46a.png)
+
+
+ ## Run Angluar app: ng serve
+ ## Run Dotnet: dotnet run
