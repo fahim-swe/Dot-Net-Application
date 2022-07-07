@@ -1,4 +1,7 @@
- ## Login-Page
+ ## Database schema
+ ![database](https://user-images.githubusercontent.com/86300358/177793731-168323ea-0064-4d86-ad0a-c26f2a72628c.jpeg)
+
+## Login-Page
 ![login_page](https://user-images.githubusercontent.com/86300358/177312332-21ddb8f9-b21f-4f6d-bdb7-edb57dcdfd5e.png)
 
  ## Registration-Page
@@ -14,6 +17,7 @@
 
  ## Chat-with user
 ![chat-](https://user-images.githubusercontent.com/86300358/177312409-35a17831-683f-4261-81d9-be30b087d46a.png)
+ 
 
 
  ## Run Angluar app: ng serve
