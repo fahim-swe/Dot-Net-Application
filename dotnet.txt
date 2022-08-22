@@ -1,0 +1,68 @@
+dotnet --info
+dotnet --help
+
+dotnet new sln
+dotnet new webapi -o API [create a web api project named API]
+dotnet sln add API [add sln file to API project]
+
+
+Setting VS code 
+-> C# 
+-> C# extensions
+-> material icon theme
+Exclude folder like obj, bin in VS code [file-> perferences-> Setting-> exclude-> add -> **/obj, **/bin]
+
+
+
+Features of dotnet 6
+-> Nullable object with '?'
+-> ImplicitUsings [api->debug-> api.GlobalUsing-> state]
+
+Entity Framework: 
+-> An object relational model
+-> Translates our code into SQL commands that update our tables in the database
+
+
+Import: 
+Pomelo.EntityFrameworkCore.MySql (for database connection and entity Framework core)
+
+
+Add DataContext.cs 
+
+
+Work on database Migration
+dotnet tool install --global dotnet-ef
+dotnet ef database drop
+dotnet ef database update
+dotnet ef migrations add InitialCreate
+
+NugetPaget manager [Shift+ctrl+p]
+
+dotnet ef migrations add InitialCreate -o Data/Migrations
+
+
+
+Token Services 
+System.IdentityModel.Tokens.Jwt 
+---> Create Token
+
+Adding the authentication middleware
+Microsoft.AspNetCore.Authentication.JwtBearer
+
+Configure Services: 
+ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>{
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+Configure 
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+app.endpoint();
