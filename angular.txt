@@ -1,0 +1,45 @@
+Create the Angular Application
+
+-> ng new Client --strict false
+
+Then go Angular language extensions
+-> setting -> angular: Enable-strict-mode-prompt [Enable some language Features]
+
+
+VS code extensions:
+Angular Language Service
+Angular Snippets (Version 13)
+
+
+// Creating NavBar
+ng g c nav --skip-tests
+
+** Angular template from
+import: FormsModule [app.module.ts]
+
+
+Insite components[nav components.ts]
+ model: any = {};
+
+ <form #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off" >
+          <input 
+                name="username"
+                [(ngModel)]="model.username"
+                class="form-control me-2" 
+                type="text" 
+                placeholder="Username" 
+                aria-label="Search">
+
+
+          <input 
+                name="password"
+                [(ngModel)]="model.password"
+                class="form-control me-2" 
+                type="password" 
+                placeholder="Password" 
+                aria-label="Password">
+
+          <button class="btn btn-outline-success" type="submit">Login</button>
+</form>
+
+
