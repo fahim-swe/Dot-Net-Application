@@ -35,7 +35,5 @@ namespace API.Controllers
             var user = await _userRepository.GetMemberAsync(username);
             return Ok(user);
         }
-
-        
     }
 }
