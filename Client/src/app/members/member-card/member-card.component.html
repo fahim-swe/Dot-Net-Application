@@ -1,6 +1,6 @@
 <div class="card mb-4">
     <div class="card-img-wrapper">
-        <img src="{{member.profileUrl}}" alt="{{member.knownAs}}" class="card-img-top">
+        <img src="{{member.profileUrl  || 'https://source.unsplash.com/random/100x100/?nature'}}" alt="{{member.knownAs}}" class="card-img-top">
         <ul class="list-inline member-icons animate text-center">
             <li 
                 class="list-inline-item"

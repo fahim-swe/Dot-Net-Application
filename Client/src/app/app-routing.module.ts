@@ -9,12 +9,14 @@ import { AuthGuard } from './_guards/auth.guard';
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
 
   {path: 'members', component: MemberListComponent, canActivate: [AuthGuard]},
   {path: 'members/:username', component: MemberDetailComponent, canActivate: [AuthGuard]},
+  {path: 'member/edit', component: MemberEditComponent, canActivate: [AuthGuard]},
   {path: 'lists', component: ListsComponent, canActivate: [AuthGuard]},
   {path: 'messages', component: MessagesComponent, canActivate: [AuthGuard]},
 
@@ -24,6 +26,8 @@ const routes: Routes = [
 
   {path: '**', component: NotFoundComponent, pathMatch:'full'}
 ];
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,29 +1,114 @@
-<form #registerFrom = "ngForm" autocomplete="off" (ngSubmit)="register()">
+<div class="container">
     <h2 class="text-center text-primary">Sign up</h2>
     <hr>
-    <div class="form-group">
-        <input 
-            name="username"
-            [(ngModel)]="model.username"
-            type="text"
-            class="form-control"
-            placeholder="Username"
-        >
 
-        <input 
-            name="password"
-            [(ngModel)]="model.password"
-            type="password"
-            class="form-control mt-2"
-            placeholder="Password"
-        >
+	<div class="row custom-wrapper">
+		<div class="col-md-12">
+			<form  [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+				<div class="mb-3">
+                 
+                   
+                    <label class="control-label" style="margin-right: 10px;">I am a: </label>
+                    <label class="radio-inline">
+                        <input type="radio" value="male" formControlName="gender"> Male
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" value="female" formControlName="gender"> Female
+                    </label>
+              
+                    
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="userName"
+                        placeholder="username"
+                        >
+                   
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="knownAs"
+                        placeholder="knowAs"
+                        >
 
-        <div class="form-group text-center mt-3">
-            <button class="btn btn-success me-2" type="submit">Register</button>
-            <button
-                (click)="cancel()" 
-                class="btn btn-success" type="button">Cancel</button>
-        </div>
+                    <input 
+                        type="date" 
+                        class="form-control" 
+                        formControlName="dateOfBirth"
+                        placeholder="Date Of Birth">
+                  
+
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="city"
+                        placeholder="city">
+                  
+
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="country"
+                        placeholder="country">
+                   
+
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        formControlName="password"
+                        placeholder="password">
+                   
+
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        formControlName="confirmpassword"
+                        placeholder="Confirm password">
+
+                </div>
+
+                <div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('gender').valid">
+                        <sup>*</sup>Select your gender
+                    </div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('userName').valid">
+                        <sup>*</sup>Username almost 6 characters
+                    </div>
+                    
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('knownAs').valid">
+                        <sup>*</sup>Nick name must need
+                    </div>
+                    
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('dateOfBirth').valid">
+                        <sup>*</sup>Age should not be more than 18 years
+                    </div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('city').valid">
+                        <sup>*</sup>City Name Need
+                    </div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('country').valid">
+                        <sup>*</sup>Country Name Need
+                    </div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('password').valid">
+                        <sup>*</sup>Password must be at least 6 characters
+                        Password combine of lower upper and number
+                    </div>
+                    <div class="alert-alert-danger" *ngIf="!profileForm.get('confirmpassword').valid">
+                        <sup>*</sup>Not match
+                    </div>
+                </div>
+                
+                <div class="form-group  mt-3">
+                    <button [disabled]="!profileForm.valid" class="btn btn-danger btn-lg me-2" type="submit">Register</button>
+                    <button
+                        (click)="cancel()" 
+                        class="btn btn-danger btn-lg" type="button">Cancel</button>
+                </div>
+      </form>
     </div>
-</form>
+  </div>
+</div>
+
+
+
+
 
