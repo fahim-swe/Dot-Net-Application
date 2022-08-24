@@ -8,6 +8,7 @@ using API.Data;
 using API.Dtos;
 using API.Entity;
 using API.Interface;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +18,12 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccoutController(DataContext context, ITokenService tokenService){
+        public AccoutController(DataContext context, ITokenService tokenService, IMapper mapper){
             _context = context;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
 
@@ -34,11 +37,10 @@ namespace API.Controllers
             
             using var hmac = new HMACSHA512();
 
-            var user = new AppUser{
-                UserName = register.UserName,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password)),
-                PasswordSalt = hmac.Key
-            };
+            var user = _mapper.Map<AppUser>(register);
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password));
+            user.PasswordSalt = hmac.Key;
+            
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
