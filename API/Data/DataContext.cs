@@ -11,7 +11,8 @@ namespace API.Data
     {
         
         public DataContext(DbContextOptions options):base(options){
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
 
         public DbSet<AppUser> Users {get; set;}
@@ -22,6 +23,7 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+         
 
             builder.Entity<UserLike>()
                 .HasKey( k => new {k.SourceUserId, k.LikedUserId});

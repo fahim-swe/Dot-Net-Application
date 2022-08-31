@@ -28,7 +28,7 @@ namespace API.Extensions
                 if (env == "Development")
                 {
                     // Use connection string from file.
-                    connStr = _config.GetConnectionString("DefaultConnection");
+                    connStr = _config.GetConnectionString("Database");
                 }
                 else
                 {
