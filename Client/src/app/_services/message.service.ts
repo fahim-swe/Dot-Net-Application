@@ -70,7 +70,7 @@ export class MessageService {
 
 
   sendMessage(username: string, content: string) {
-    return this.http.post("https://localhost:7199/api/Messages", {
+    return this.http.post( this.baseUrl + "Messages", {
       recipientUsername: username,
       content
     });

@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { message } from '../../_models/message';
 import { MessageService } from '../../_services/message.service';
 import { sendMessage } from '../../_models/sendMessage';
@@ -12,7 +12,7 @@ import { User } from 'src/app/_models/user';
   templateUrl: './member-message.component.html',
   styleUrls: ['./member-message.component.css']
 })
-export class MemberMessageComponent implements OnInit, AfterContentInit {
+export class MemberMessageComponent implements OnInit, OnDestroy {
 
   @ViewChild('messageForm') messageForm: NgForm;
 
@@ -44,8 +44,9 @@ export class MemberMessageComponent implements OnInit, AfterContentInit {
     });
   }
 
-  ngAfterContentInit(): void {
-    this.container = document.getElementById("msgContainer");           
-    this.container.scrollTop = this.container.scrollHeight;   
+  
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
   }
+  
 }

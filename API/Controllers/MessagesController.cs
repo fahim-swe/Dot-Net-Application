@@ -20,22 +20,21 @@ namespace API.Controllers
     [Authorize]
     public class MessagesController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMessageRepository _messageRepository;
+       
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly PresenceTracker _tracker;
       
 
-        public MessagesController(IUserRepository userRepository, 
-            IMessageRepository messageRepository,
+        public MessagesController(
+            IUnitOfWork unitOfWork,
             IMapper mapper, 
             IServiceProvider serviceProvider, 
             PresenceTracker tracker)
         {
-            _userRepository = userRepository;
-            _messageRepository = messageRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _serviceProvider = serviceProvider;
             _tracker = tracker;
@@ -49,8 +48,8 @@ namespace API.Controllers
             if(username == createMessageDto.RecipientUsername)
                 return BadRequest("You cannot send messages to yourself");
             
-            var sender = await _userRepository.GetUserByUsernameAsync(username);
-            var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
+            var sender = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var recipient = await _unitOfWork.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
             
             if(recipient == null) return NotFound();
 
@@ -70,10 +69,10 @@ namespace API.Controllers
                 message.DateRead = DateTime.Now;
             }
 
-            _messageRepository.AddMessage(message);
+            _unitOfWork.MessageRepository.AddMessage(message);
             
 
-            if(await _messageRepository.SaveAllAsync())
+            if(await _unitOfWork.Complete())
             {
                 var chatHub = (IHubContext<MessageHub>)_serviceProvider.GetService(typeof(IHubContext<MessageHub>));
 
@@ -92,7 +91,7 @@ namespace API.Controllers
             MessageParams messageParams)
         {
             messageParams.Username = User.GetUsername();
-            var messsage = await _messageRepository.GetMessagesForUser(messageParams);
+            var messsage = await _unitOfWork.MessageRepository.GetMessagesForUser(messageParams);
 
             Response.AddPaginationHeader(messsage.CurrentPage, messsage.PageSize,
                 messsage.TotalCount, messsage.TotalPages);
@@ -105,7 +104,7 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessageThread(string username)
         {
             var currentUsername = User.GetUsername();
-            return Ok(await _messageRepository.GetMessageThread(currentUsername, username));
+            return Ok(await _unitOfWork.MessageRepository.GetMessageThread(currentUsername, username));
         }
 
         private string GetGroupName(string getUserId, string? otherUser)
