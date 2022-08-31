@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { member } from '../../_models/member';
+import { PresenceService } from '../../_services/presence.service';
 
 @Component({
   selector: 'app-member-card',
@@ -9,8 +10,11 @@ import { member } from '../../_models/member';
 export class MemberCardComponent implements OnInit {
 
   @Input() member:member;
+
   
-  constructor() { }
+  constructor(public presence: PresenceService) {
+    
+   }
 
   ngOnInit(): void {
   }

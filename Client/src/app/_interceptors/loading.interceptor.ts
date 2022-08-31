@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { delay, finalize, Observable } from 'rxjs';
 import { BusyService } from '../_services/busy.service';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -14,11 +15,15 @@ export class LoadingInterceptor implements HttpInterceptor {
   constructor(private busyService: BusyService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.busyService.busy();
-
     
+    console.log(request.url);
+    if(request.url.match(environment.apiUrl + "Messages")) {
+      return next.handle(request);
+    }
+    this.busyService.busy();
+        
     return next.handle(request).pipe(
-      delay(1000),
+      delay(500),
       finalize(()=>{
         this.busyService.idle();
       })
