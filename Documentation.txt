@@ -1,0 +1,687 @@
+Implementing the messaging functionality and gain an understanding of the 
+following: 
+1) More many to many relationships
+2) Using query params in angular 
+3) Using route resolvers in angular 
+ 
+
+
+Create Message Entity 
+namespace API.Entity
+{
+    public class Message
+    {
+        [Key]
+        public Guid Id {get; set;}
+
+
+        public Guid SenderId {get; set;}
+        public string SenderUsername {get; set;}
+        public AppUser Sender {get; set;}
+
+
+        public string RecipientId {get; set;}
+        public string RecipientUsername {set; get;}
+        public AppUser Recipient {get; set;}
+        
+
+        public string Content {get; set;}
+        public DateTime? DateRead {get; set;}
+        public bool SenderDeleted {get; set;}
+        public bool RecipientDeleted {get; set;}
+
+    }
+}
+
+public class AppUser
+{
+    ....
+    ....
+    ....
+    public ICollection<Message>? MessagesSent {get; set;}
+    public ICollection<Message>? MessagesReceived {get; set;}
+}
+
+
+In DataContext 
+public class DataContext : DbContext
+    {
+        .....
+        .....
+        .....
+        public DbSet<Message> Messages {get; set;}
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            .....
+            .....
+            .....
+
+            
+            builder.Entity<Message>()
+                .HasOne( u => u.Recipient)
+                .WithMany( m => m.MessagesReceived)
+                .OnDelete( DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne( u => u.Sender)
+                .WithMany( m => m.MessagesSent)
+                .OnDelete( DeleteBehavior.Restrict);
+        }
+    }
+
+
+public class CreateMessageDto
+{
+        public string RecipientUsername {get; set;}
+        public string Content {get; set;}
+}
+
+
+
+CreateMap<Message, MessageDto>()
+        .ForMember( dest => dest.SenderPhotoUrl , opt => opt.MapFrom(src => 
+            src.Sender.Photos.FirstOrDefault( x => x.IsMain).Url
+        ))
+        .ForMember( dest => dest.RecipientPhotoUrl, opt => opt.MapFrom(src => 
+            src.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url
+        ));
+
+
+// query params
+public class PaginationParams
+    {
+        private const int MaxPageSize = 50;
+        public int PageNumber {get; set; } = 1;
+        private int _pageSize = 10;
+
+        public int PageSize 
+        {
+            get => _pageSize;
+            set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
+        }
+    }
+
+ public class MessageParams : PaginationParams
+    {
+        public string Username {get; set;}
+        public string Container {get; set;} = "Unread";
+    }
+
+
+
+// Respository 
+ public interface IMessageRepository
+{
+    void AddMessage(Message message);
+    void DeleteMessage(Message message);
+
+    Task<Message> GetMessage(Guid Id);
+    Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams);
+    Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername);
+    Task<bool> SaveAllAsync();  
+}
+
+
+public class MessageRepository : IMessageRepository
+    {
+
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+        public MessageRepository(DataContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public void AddMessage(Message message)
+        {
+            _context.Messages.Add(message);
+        }
+
+        public void DeleteMessage(Message message)
+        {
+            _context.Messages.Remove(message);
+        }
+
+        public async Task<Message> GetMessage(Guid Id)
+        {
+            return await _context.Messages.FindAsync(Id);   
+        }
+
+        public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
+        {
+            var query = _context.Messages
+                .OrderByDescending( m => m.MessageSent)
+                .AsQueryable();
+            
+            query = messageParams.Container switch
+            {
+                "Inbox" => query.Where( u => u.Recipient.UserName == messageParams.Username),
+                "Outbox" => query.Where( u => u.Sender.UserName == messageParams.Username),
+                _ => query.Where( u => u.Recipient.UserName == messageParams.Username && u.DateRead == null)
+            };
+
+            var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
+
+            return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
+        }
+
+        public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername)
+        {
+            var messages = await _context.Messages
+                .Include( u => u.Sender).ThenInclude( p => p.Photos)
+                .Include( u => u.Recipient).ThenInclude ( p => p.Photos)
+                .Where( m => m.SenderUsername == currentUsername && m.RecipientUsername == recipientUsername 
+                || 
+                m.SenderUsername == recipientUsername && m.RecipientUsername == currentUsername)
+
+                .OrderBy( m => m.MessageSent)
+                .ToListAsync();
+
+            var unreadMessages = messages.Where( m => m.DateRead == null && m.Recipient.UserName == currentUsername).ToList();
+
+            if(unreadMessages.Any())
+            {
+                foreach(var message in unreadMessages){
+                    message.DateRead = DateTime.Now;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            return _mapper.Map<IEnumerable<MessageDto>>(messages);
+        }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+    }
+
+
+// Controller
+
+public class MessagesController : BaseApiController
+{
+        private readonly IUserRepository _userRepository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IMapper _mapper;
+
+        public MessagesController(IUserRepository userRepository, 
+            IMessageRepository messageRepository,
+            IMapper mapper)
+        {
+            _userRepository = userRepository;
+            _messageRepository = messageRepository;
+            _mapper = mapper;
+        }
+
+
+    [HttpPost]
+    public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
+    {
+        var username = User.GetUsername();
+        if(username == createMessageDto.RecipientUsername)
+            return BadRequest("You cannot send messages to yourself");
+            
+        var sender = await _userRepository.GetUserByUsernameAsync(username);
+        var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
+            
+        if(recipient == null) return NotFound();
+
+        var message =  new Message
+        {
+            SenderId = sender.Id,
+            SenderUsername = sender.UserName,
+            Sender = sender,
+
+            RecipientId = recipient.Id, 
+            RecipientUsername = recipient.UserName,
+            Recipient = recipient,
+        
+
+            Content = createMessageDto.Content
+        };
+
+        _messageRepository.AddMessage(message);
+        if(await _messageRepository.SaveAllAsync()) return Ok(_mapper.Map<MessageDto>(message));
+
+        return BadRequest("Failed to send message");
+    }
+
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery]
+            MessageParams messageParams)
+    {
+        messageParams.Username = User.GetUsername();
+        var messsage = await _messageRepository.GetMessagesForUser(messageParams);
+
+        Response.AddPaginationHeader(messsage.CurrentPage, messsage.PageSize,
+            messsage.TotalCount, messsage.TotalPages);
+            
+        return messsage;
+    }
+
+
+    [HttpGet("thread/{username}")]
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessageThread(string username)
+    {
+        var currentUsername = User.GetUsername();
+        return Ok(await _messageRepository.GetMessageThread(currentUsername, username));
+    }
+}
+
+
+In Migration: 
+ dotnet ef migrations add MessageAdded
+ dotnet ef database update
+
+
+ Setting up Angular Part-1) 
+
+1) create message object 
+
+ export interface message {
+    id: string;
+    senderId: string;
+    senderUsername: string;
+    senderPhotoUrl: string;
+    recipientId: string;
+    recipientUsername: string;
+    recipientPhotoUrl: string;
+    content: string;
+    messageSent: Date;
+    dateRead?: any;
+}
+
+
+12) Activating the message Tab
+
+-> Create template ref variable in Tab section
+
+
+ <tabset class="member-tabset" [justified]="true" #memberTabs>
+        <tab (selectTab)="onTabActivated($event)">
+            
+        </tab>
+
+        <tab (selectTab)="onTabActivated($event)">
+               
+        </tab>
+
+
+        <tab  (selectTab)="onTabActivated($event)">
+        
+        </tab>
+
+        <tab (selectTab)="onTabActivated($event)">
+            <app-member-message [messages]="messages" ></app-member-message>
+        </tab>
+</tabset>
+
+
+
+member-detail.components.ts
+
+
+@ViewChild('memberTabs') memberTabs: TabsetComponent;
+
+messages: message[] = [];
+activeTab: TabDirective;
+
+
+loadMessages()
+{
+   this.messageService.getMessageThread(this.member.userName).subscribe(message => {
+      this.messages = message;
+   })
+}
+
+onTabActivated(data: TabDirective)
+{
+   console.log(data);
+   this.activeTab = data;
+    if(this.activeTab.heading === 'Message' && this.messages.length === 0)
+    {
+      this.loadMessages();
+    }
+}
+
+
+13) Using query params 
+
+Activation tabs inside 
+
+member-detail.components.ts
+seletedTab(tabId: number)
+{
+    this.memberTabs.tabs[tabId].active = true;
+}
+
+member-detail.components.html
+<button (click)=" seletedTab(3)" class="btn btn-success">Message</button>
+
+
+
+
+
+
+// SignalR
+Open source library that provides real-time web functionality to Apps 
+Good for: 
+-> Dashboards and monitoring Apps
+-> Collaborative Apps 
+-> Apps that require notifications 
+-> Chat apps 
+
+Features 
+-> Handles connections management automatically 
+-> Sends messages to all connected clinets simultaneously 
+-> Sends messages to specific clients or groups of clients
+-> Supports: 
+Web sockets, server-sent events, long polling
+
+Exampls: 
+Onlines users 
+1) Bob connects to signalR hub 
+2) Hub notifies all connected users that bob has connected .
+
+
+
+
+************************************************************************
+02) Adding a presence Hub 
+Create a class 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using API.Extensions;
+using Microsoft.AspNetCore.SignalR;
+
+namespace API.SignalR
+{
+    public class PresenceHub : Hub
+    {
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.Others.SendAsync("UserIsOnline", Context.User.GetUsername());
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await Clients.Others.SendAsync("UserIsOffline", Context.User.GetUsername());
+            await base.OnDisconnectedAsync(exception);
+        }
+    }
+}
+
+
+Add SignalR service--
+services.AddSignalR();
+
+
+Add Routing path 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<PresenceHub>("hubs/presence");
+});
+
+*******************************************************************************
+03) Authenticating to SignalR
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>{
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+              ValidateIssuerSigningKey = true,
+              IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+              ValidateIssuer = false,
+              ValidateAudience = false
+            };
+
+
+          options.Events = new JwtBearerEvents
+          {
+              OnMessageReceived = context => {
+                  var accessToken = context.Request.Query["access_token"];
+                  var path = context.HttpContext.Request.Path;
+
+                  if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs")){
+                      context.Token = accessToken;
+                  }
+                  return Task.CompletedTask;
+              }
+          };
+      });
+
+
+*********************************************************************
+04) Client side SignalR 
+Create hub presenceHub service
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PresenceService {
+
+  hubUrl = environment.hubUrl;
+  private hubConnection : HubConnection;
+
+
+  constructor(private toastr : ToastrService) { }
+
+  createHubConnection(user: User)
+  {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(this.hubUrl + 'presence', {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+        accessTokenFactory: () => user.token
+      })
+      .withAutomaticReconnect()
+      .build()
+
+    this.hubConnection 
+      .start()
+      .catch(error => console.log(error));
+    
+    this.hubConnection.on('UserIsOnline', username => {
+      this.toastr.info(username + ' has connected');
+    })
+
+
+    this.hubConnection.on('UserIsOffline', username => {
+      this.toastr.warning(username + ' has disconnected');
+    })
+  }
+
+
+  stopHubConnection()
+  {
+    this.hubConnection.stop().catch(error => console.log(error));
+  }
+}
+
+
+
+On. app.component.ts 
+setCurrentUser()
+  {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    if(user){
+      this.presence.createHubConnection(user);
+    }
+    this.accountService.setCurrentUser(user);
+  }
+
+On. accountService 
+
+login(model:any)
+  {
+    return this.http.post("https://localhost:7199/api/Accout/login", model).pipe(
+      map( (response: User)=>{
+        const user = response;
+        if(user){
+          localStorage.setItem('user', JSON.stringify(user));
+          this.presence.createHubConnection(user);
+          this.currentUserSource.next(user);
+        }
+      })
+    )
+  }
+
+
+  register(model: any)
+  {
+    return this.http.post( this.baseUrl + "Accout/register", model).pipe(
+      map( (response: User)=>{
+        const user = response;
+        if(user){
+          localStorage.setItem('user', JSON.stringify(user));
+          this.presence.createHubConnection(user);
+          this.currentUserSource.next(user);
+          return user;
+        }
+      })
+    )
+  }
+
+  setCurrentUser(user: User)
+  {
+    this.currentUserSource.next(user);
+  }
+
+
+  logout()
+  {
+    localStorage.removeItem('user');
+    this.currentUserSource.next(null);
+    this.presence.stopHubConnection();
+  }
+
+
+
+******************************************************************
+05) Adding a presence tracker Back end
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API.SignalR
+{
+    public class PresenceTracker
+    {
+        private static readonly Dictionary<string, List<string>> OnlineUsers = 
+            new Dictionary<string, List<string>>();
+        
+        public Task UserConnected(string username, string connectionId)
+        {
+            lock(OnlineUsers)
+            {
+                if(OnlineUsers.ContainsKey(username)){
+                    OnlineUsers[username].Add(connectionId);
+                }
+                else{
+                    OnlineUsers.Add(username, new List<string>{connectionId});
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+
+        public Task UserDisconnected(string username, string connectionId)
+        {
+            lock(OnlineUsers)
+            {
+                if(!OnlineUsers.ContainsKey(username)) return Task.CompletedTask;
+                OnlineUsers[username].Remove(connectionId);
+
+                if(OnlineUsers[username].Count == 0){
+                    OnlineUsers.Remove(username);
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task<string[]> GetOnlineUsers()
+        {
+            string[] onlineUsers;
+            lock(OnlineUsers)
+            {
+                onlineUsers = OnlineUsers.OrderBy(k => k.Key).Select(k => k.Key).ToArray();
+            }
+            return Task.FromResult(onlineUsers);
+        }
+    }   
+}
+
+
+
+.... Add service 
+services.AddSingleton<PresenceTracker>();
+
+
+.... On PresenceHub class 
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using API.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+
+namespace API.SignalR
+{
+
+    [Authorize]
+    public class PresenceHub : Hub
+    {
+        private readonly PresenceTracker _tracker;
+        public PresenceHub(PresenceTracker tracker)
+        {
+            _tracker = tracker;
+        }
+
+
+        public override async Task OnConnectedAsync()
+        {
+            await _tracker.UserConnected(Context.User.GetUsername(), Context.ConnectionId);
+
+            await Clients.Others.SendAsync("UserIsOnline", Context.User.GetUsername());
+
+            var currentUsers = await _tracker.GetOnlineUsers();
+            await Clients.All.SendAsync("GetOnlineUsers", currentUsers);
+
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await _tracker.UserDisconnected(Context.User.GetUsername(), Context.ConnectionId);
+            
+            await Clients.Others.SendAsync("UserIsOffline", Context.User.GetUsername());
+            await base.OnDisconnectedAsync(exception);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+Unit of work
+Maintains a list of objects affected by a business transaction and 
+coordinates the writing of changes 

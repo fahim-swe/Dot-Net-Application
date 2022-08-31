@@ -66,3 +66,21 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.endpoint();
+
+
+like user, Functionality 
+1) many to many relations 
+2) configure entites in the DbContext
+
+
+AppUser ---------(Can be liked by many)--------- AppUser
+UserLike Tables: 
+SourceUsedId ---------- LikedUserId 
+fahim1   -------------- fahim2  
+fahim1   ------------------- fahim3 
+fahim3 ------------------fahim1
+fahim3 ------------------fahim4
+
+
+So-> 
+AppUser (has one) 
