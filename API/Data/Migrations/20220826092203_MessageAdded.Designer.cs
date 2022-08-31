@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220826092203_MessageAdded")]
+    partial class MessageAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,20 +89,21 @@ namespace API.Data.Migrations
                     b.Property<DateTime?>("DateRead")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("MessageSent")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool?>("RecipientDeleted")
+                    b.Property<bool>("RecipientDeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<Guid>("RecipientId")
+                    b.Property<string>("RecipientId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("RecipientId1")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("RecipientUsername")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool?>("SenderDeleted")
+                    b.Property<bool>("SenderDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<Guid>("SenderId")
@@ -112,7 +115,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("RecipientId1");
 
                     b.HasIndex("SenderId");
 
@@ -164,7 +167,7 @@ namespace API.Data.Migrations
                 {
                     b.HasOne("API.Entity.AppUser", "Recipient")
                         .WithMany("MessagesRecieved")
-                        .HasForeignKey("RecipientId")
+                        .HasForeignKey("RecipientId1")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

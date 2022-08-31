@@ -45,11 +45,10 @@ namespace API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.Token = _tokenService.CreateToken(user);
 
-            return new UserDto{
-                Username = register.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
+            return userDto;
         }
 
 
@@ -72,10 +71,10 @@ namespace API.Controllers
             }
 
 
-            return new UserDto{
-                Username = login.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.Token = _tokenService.CreateToken(user);
+            
+            return userDto;
         }
 
 
