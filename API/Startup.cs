@@ -65,6 +65,8 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
 

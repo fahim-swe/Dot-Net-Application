@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220831181322_PostgresInitial")]
-    partial class PostgresInitial
+    [Migration("20220901054820_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,10 +37,10 @@ namespace API.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -57,7 +57,7 @@ namespace API.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LastActive")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LookingFor")
                         .HasColumnType("text");
@@ -90,10 +90,10 @@ namespace API.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("DateRead")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("MessageSent")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool?>("RecipientDeleted")
                         .HasColumnType("boolean");
